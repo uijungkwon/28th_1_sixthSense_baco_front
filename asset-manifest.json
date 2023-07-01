@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/solux/static/js/main.d30dfca2.js",
+    "index.html": "/solux/index.html",
+    "main.d30dfca2.js.map": "/solux/static/js/main.d30dfca2.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d30dfca2.js"
+  ]
+}
