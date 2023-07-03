@@ -18,7 +18,7 @@ import {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #bbfaca69;
+    background-color: #bbfaca95;
     position: fixed;
     width: 100%;
     top: 0;
@@ -81,22 +81,9 @@ import {
     left: 0;
     right: 0;
     margin: 0 auto;
-    background-color: #1621f1;
+    background-color: green;
   `;
- const Footer  = styled.div`
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 55px;
-  background-color:#bbfaca69 ;
-  padding: 20px 40px;
-  font-size: 15px;
- `;
+ 
   function Header() {
     //2) 현재 어느 페이지에 있는지 확인
     const homeMatch = useRouteMatch("/");
@@ -104,16 +91,19 @@ import {
     const roadMatch = useRouteMatch("/Road");
     const enrollMatch = useRouteMatch("/Enroll");
     const loginMatch = useRouteMatch("/Login");
-    //3) 스크롤 내릴때 Nav바 색깔 변환
-    const { scrollY } = useScroll();
-    const navAnimation = useAnimation();
-
+    
+    //3) 로고 클릭시 홈으로 이동
+    const history = useHistory();
+    const gohome = () => {
+        history.push(`/`);
+      };
+    
     return (
     <>
       <Nav
       >
         <Col>
-          <Logo>
+          <Logo onClick={gohome}>
             따릉이 경로 추천 서비스
           </Logo>
           <Items>
@@ -123,13 +113,13 @@ import {
               </Link>
             </Item>
             <Item>
-              <Link to="/Mypage">
-                마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
+              <Link to="/Road">
+                경로 추천 {roadMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
             <Item>
-              <Link to="/Road">
-                경로 추천 {roadMatch ? <Circle layoutId="circle" /> : null}
+              <Link to="/Mypage">
+                마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
             </Items>
@@ -147,14 +137,6 @@ import {
             </LogItems>
         </Col>
       </Nav>
-    
-      <Footer>
-        <Items>
-        <Item>
-            사업자 정보 , 메일 주소 등... 
-        </Item>
-        </Items>
-      </Footer>
      </>
     );
   }
