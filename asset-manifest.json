@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/solux/static/js/main.52be72f6.js",
+    "main.js": "/solux/static/js/main.fbd1bc9d.js",
     "index.html": "/solux/index.html",
-    "main.52be72f6.js.map": "/solux/static/js/main.52be72f6.js.map"
+    "main.fbd1bc9d.js.map": "/solux/static/js/main.fbd1bc9d.js.map"
   },
   "entrypoints": [
-    "static/js/main.52be72f6.js"
+    "static/js/main.fbd1bc9d.js"
   ]
 }
