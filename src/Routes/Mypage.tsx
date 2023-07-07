@@ -78,7 +78,7 @@ const CreateForm = styled.form`
 	button {
 		right: 0;
 		width: 40%;
-		background-color: #c0ffa8;
+		background-color: #ffff81;
 		border: none;
 		border-radius: 10px;
 		font-size: 20px;
@@ -102,7 +102,7 @@ const CreateForm = styled.form`
     }
 `;
 const InfoButton = styled.button`
-        background-color: #c0ffa8;
+        background-color: #ffff81;
 		border: none;
 		border-radius: 10px;
 		font-size: 18px;

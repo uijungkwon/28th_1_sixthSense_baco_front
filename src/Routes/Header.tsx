@@ -8,21 +8,21 @@ import {
   import { Link, useHistory, useRouteMatch } from "react-router-dom";
   import styled from "styled-components";
   import { useForm } from "react-hook-form";
-  
+
+
   interface IForm {
     keyword: string;
   }
-  
   const Nav = styled.nav`
     z-index: 99;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #bbfaca95;
+    background-color: #bbe1fad2;
     position: fixed;
     width: 100%;
     top: 0;
-    height: 80px;
+    height: 46px;
     font-size: 15px;
     padding: 20px 40px;
   `;
@@ -35,13 +35,17 @@ import {
     margin-right: 350px;
     width: 250px;
     height: 25px;
-    font-size: 20px;
+    font-size: 30px;
+    font-family: "Jua";
     color: black;
+    
   `;
 
   const Items = styled.ul`
     display: flex;
     align-items: center;
+
+    font-family: "Hanna";
   
     color: ${(props) => props.theme.white.darker};
     transition: color 0.3 ease-in-out;
@@ -81,7 +85,7 @@ import {
     left: 0;
     right: 0;
     margin: 0 auto;
-    background-color: green;
+    background-color: #0044ff;
   `;
  
   function Header() {
@@ -104,7 +108,7 @@ import {
       >
         <Col>
           <Logo onClick={gohome}>
-            따릉이 경로 추천 서비스
+            바코
           </Logo>
           <Items>
             <Item>
