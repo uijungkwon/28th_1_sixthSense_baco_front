@@ -9,7 +9,7 @@ import {
   import styled from "styled-components";
   import { useForm } from "react-hook-form";
 
-
+  const bike = require("../images/bike.png");
   interface IForm {
     keyword: string;
   }
@@ -31,16 +31,29 @@ import {
     display: flex;
     align-items: center;
   `;
-  const Logo = styled.div`
-    margin-right: 350px;
-    width: 250px;
+  // 1) 로고 화면 
+const LogoItems = styled.ul`
+  display: flex;
+  align-items: center;
+  width: 630px;
+`;
+  const LogoItem = styled.li`
+    display: flex;
+    position: relative;
+    justify-content: center;
+    flex-direction: column;
     height: 25px;
     font-size: 30px;
     font-family: "Jua";
     color: black;
-    
+  `;
+  const LogoIcon = styled.img`
+    width: 60px;
+    height: 54px;
+    margin: 10px;
   `;
 
+  //2) 메뉴바 화면 
   const Items = styled.ul`
     display: flex;
     align-items: center;
@@ -61,6 +74,10 @@ import {
     flex-direction: column;
     color:black;
   `;
+
+  
+
+// 3) 회원가입/로그인 화면
   const LogItems = styled.ul`
   margin-left: 200px;
   display: flex;
@@ -68,7 +85,7 @@ import {
   font-size:12px;
  
 `;
-    const LogItem = styled.li`
+  const LogItem = styled.li`
     margin-right: 30px;
     display: flex;
     position: relative;
@@ -76,6 +93,7 @@ import {
     flex-direction: column;
     color:black;
   `;
+  //4) 페이지 이동 동그라미
   const Circle = styled(motion.span)`
     position: absolute;
     width: 5px;
@@ -107,9 +125,14 @@ import {
       <Nav
       >
         <Col>
-          <Logo onClick={gohome}>
-            바코
-          </Logo>
+        <LogoItems>
+          <LogoItem>
+            바코 
+          </LogoItem>
+          <LogoItem>
+            <LogoIcon src = {bike} />
+          </LogoItem>
+        </LogoItems>
           <Items>
             <Item>
               <Link to="/">

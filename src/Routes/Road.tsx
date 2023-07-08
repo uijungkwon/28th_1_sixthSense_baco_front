@@ -9,22 +9,38 @@ import {
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 //배경색 배경 길이 정하기
+const roadBg = require("../images/roadBg.png");
+
 const Wrapper = styled(motion.div)`
-  height: 120vh;
+  height: 110vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  //background: linear-gradient(155deg, rgb(172, 250, 151), rgb(133, 254, 246));
-  background:whitesmoke;
-  border-radius: 3px;
+  overflow-x: hidden;
+  background-color:white;
+`;
+
+const Banner = styled.div ` 
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 73px;
+  background-size: cover;
+  position: relative;
+  margin-top: 200px;
+  background-image:url(${roadBg});
+  background-repeat: no-repeat;
 `;
 const Board = styled(motion.div)`
   display: grid;
+  margin-bottom: 100px;
   grid-template-columns: 1fr 1fr;
 `;
 const Title = styled.h1`
   margin-top: -250px;
+  margin-left:550px;
   font-size:30px;
   color:black;
 `;
@@ -66,21 +82,6 @@ const CreateForm = styled.form`
 	margin-bottom: 10px;
 	background-color: ${(props) => props.theme.cardColor};
   flex-direction: column;//위아래로 input 창 뜨게 만들기
-  button {
-    //right: 0;
-		//width: 40%;
-		background-color: #ffff81;
-		border: none;
-		border-radius: 10px;
-		font-size: 20px;
-		//align-items: center;
-		//justify-content: center;
-		color: ${(props) => props.theme.accentColor};
-    margin-bottom: 70px;
-    //margin-left:110px;      
-
-
-  }
 `;
 
 const Input = styled.input`
@@ -97,17 +98,26 @@ const Input = styled.input`
     margin-bottom:40px;
 `;
 const Button = styled.button`
-    right: 0;
+    //right: 0;
 		width: 40%;
 		background-color: #ffff81;
 		border: none;
 		border-radius: 10px;
 		font-size: 20px;
-		align-items: center;
-		justify-content: center;
 		color: ${(props) => props.theme.accentColor};
     margin-top: 130px;
-    //margin-left:110px;      
+    margin-left:110px;      
+
+`;
+const SaveButton = styled.button`
+		width: 11%;
+		background-color: #ffff81;
+		border: none;
+		border-radius: 10px;
+    position:absolute;
+		font-size: 20px;
+		color: ${(props) => props.theme.accentColor};
+    margin-top:300px;
 
 `;
 const P = styled.p`
@@ -124,16 +134,11 @@ const Label = styled.label`
 `;
 
 const LevelButton = styled.button`
-    //right: 0;
-		//width: 40%;
 		background-color: #ffff81;
 		border: none;
 		border-radius: 10px;
 		font-size: 18px;
-		///align-items: center;
-		//justify-content: center;
 		color: ${(props) => props.theme.accentColor};
-    //margin-top: 130px;
     margin-left:10px;    
 `;
 
@@ -204,6 +209,7 @@ function Road() {
   return (
     <>
       <Wrapper>
+        <Banner>
         <Title>따릉이 경로 추천</Title>
         <Board>
           <Box >
@@ -215,7 +221,7 @@ function Road() {
                 <Li >도착지: {end.text}</Li>
                   ))}
             </map>
-            <Button>경로 저장</Button>
+            <SaveButton>경로 저장</SaveButton>
           </Box>
           <Box >
             <CreateForm onSubmit={handleSubmit(onValid)} >
@@ -236,16 +242,18 @@ function Road() {
                 />
               <P>
                     <Label>난이도</Label>
-                    <LevelButton name="상" onClick = {onclick}>상</LevelButton>
-                    <LevelButton name="중" onClick = {onclick} >중</LevelButton>
-                    <LevelButton name="하" onClick = {onclick}>하</LevelButton>
+                    
+                    <LevelButton type = "button" name="상" onClick = {onclick}>상</LevelButton>
+                    <LevelButton type = "button" name="중" onClick = {onclick} >중</LevelButton>
+                    <LevelButton type = "button" name="하" onClick = {onclick}>하</LevelButton>
               </P>
               </P>
-              <button onClick = {btnClick} >경로 찾기</button>
+              <Button onClick = {btnClick} >경로 찾기</Button>
 
             </CreateForm>
           </Box>
-        </Board>
+          </Board>
+        </Banner>
       </Wrapper>
     </>
   );
