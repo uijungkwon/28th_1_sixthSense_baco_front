@@ -167,5 +167,5 @@ const LogoItems = styled.ul`
      </>
     );
   }
-  
+  //로그인 완성하면 로그인 items 에 "아이디"가 뜨도록 생성함 
   export default Header;

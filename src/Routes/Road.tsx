@@ -40,9 +40,10 @@ const Board = styled(motion.div)`
 `;
 const Title = styled.h1`
   margin-top: -250px;
-  margin-left:550px;
-  font-size:30px;
+  margin-left:530px;
+  font-size:37px;
   color:black;
+  font-weight:bold;
 `;
 const Box = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);

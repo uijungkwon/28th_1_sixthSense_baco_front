@@ -5,6 +5,7 @@ import Header from "./Routes/Header";
 import Road from "./Routes/Road";
 import Enroll from "./Routes/Enroll";
 import Login from "./Routes/Login";
+import Update from "./Routes/Update";
 function App(){
   return (
     <Router>
@@ -15,6 +16,7 @@ function App(){
         <Route path = "/Enroll"><Enroll/></Route>
         <Route path = "/Login"><Login /></Route>
         <Route path="/"><Home/></Route>
+        
       </Switch>
     </Router>
   );
