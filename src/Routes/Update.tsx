@@ -76,41 +76,41 @@ const Label = styled.label`
   margin-right:30px;
 `;
 interface IForm { //start 값의 타입
-  id: string;
   pw: string;
+  pwTwo: string;
 }
 
 function Update() {
   const { register, handleSubmit, setValue } =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
-      id:"",
-      pw:""
+      pw:"",
+      pwTwo:""
     },
   });
-  const onValid = ({id,pw}: IForm) => {
-    console.log(id,"and", pw);
+  const onValid = ({pw,pwTwo}: IForm) => {
+    console.log(pw,"and", pwTwo);
   };
 
   return (
     <>
     <Wrapper>
-      <Box>
+      <Box >
         <CreateForm onSubmit={handleSubmit(onValid)} >
               <P>
-                <Label style={{ paddingRight:6}}>아이디 </Label>
-                <Input {...register("id", {
-                  required: "id를 입력하세요",
-                })}
-                  placeholder="id를 입력하세요"
-                />
-                </P>
-              <P>
-                <Label>비밀번호</Label>
+                <Label style={{ paddingRight:35}}>비밀번호 </Label>
                 <Input {...register("pw", {
                   required: "pw를 입력하세요",
                 })}
-                  placeholder= "pw를 입력하세요"
+                  placeholder="pw를 입력하세요"
+                />
+                </P>
+              <P>
+                <Label>비밀번호 확인 </Label>
+                <Input {...register("pwTwo", {
+                  required: "pw를 한번더 입력하세요",
+                })}
+                  placeholder= "pw를 한번 더 입력하세요"
                 />
               </P>
               <Button >수정 완료</Button>

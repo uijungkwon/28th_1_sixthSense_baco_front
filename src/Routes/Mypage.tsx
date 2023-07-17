@@ -14,8 +14,9 @@ import MyList from './MyList';
 import styled from 'styled-components';
 import { useQuery } from 'react-query';
 import { motion } from 'framer-motion';
+import { KakaoMapContext } from 'react-kakao-maps-sdk/lib/@types/components/Map';
 const roadBg = require("../images/roadBg.png");
-
+const kakao = window;
 
 //마이 페이지 detail 화면 -> 이중 라우터를 사용하기 위해서 스타일 위치 맞춰야함
 const Wrapper = styled(motion.div)`
@@ -73,11 +74,13 @@ const Tab = styled.span<{ isActive: boolean }>`//다른탭을 클릭하면 상�
 function Mypage (){
   const updateMatch = useRouteMatch('/Update');
   const myListMatch = useRouteMatch('/MyList');
+
   
   return (
     //홈 버튼 생성
-<><Wrapper>
-    <Container>
+  <>
+<Wrapper>
+    <Container >
       <Header>
         <Title>
           마이페이지
@@ -92,7 +95,7 @@ function Mypage (){
               <Link to="/Mypage/MyList">나의 경로 보기</Link>
             </Tab>
           </Tabs>
-
+        
           <Switch>
             <Route path="/Mypage/Update">
               <Update />
@@ -107,3 +110,6 @@ function Mypage (){
   );
 }
 export default Mypage;
+/*
+
+            */
