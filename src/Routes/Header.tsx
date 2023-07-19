@@ -119,10 +119,26 @@ const LogoItems = styled.ul`
     const gohome = () => {
         history.push(`/`);
       };
+    //4) 스크롤 내리면 헤더 투명하게 변경
+    const { scrollY } = useScroll();
+    const navAnimation = useAnimation();
+    useMotionValueEvent(scrollY, "change", () => {
+      if (scrollY.get() > 100) {
+        navAnimation.start({
+          backgroundColor: "#0000000",
+        });
+      } else {
+        navAnimation.start({
+          backgroundColor: "#bbe1fad2",
+        });
+      }
+    });
     
     return (
     <>
       <Nav
+       //initial={{ backgroundColor: "#bbe1fad2" }}
+       //animate={navAnimation}
       >
         <Col>
         <LogoItems>
@@ -141,12 +157,17 @@ const LogoItems = styled.ul`
             </Item>
             <Item>
               <Link to="/Road">
-                경로 추천 {roadMatch ? <Circle layoutId="circle" /> : null}
+                후기 작성  {roadMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
             <Item>
               <Link to="/Mypage">
                 마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
+              </Link>
+            </Item>
+            <Item>
+              <Link to="/Review">
+                후기 공유 게시판 {myPageMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
             </Items>

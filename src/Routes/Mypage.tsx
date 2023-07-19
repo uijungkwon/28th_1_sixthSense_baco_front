@@ -92,7 +92,7 @@ function Mypage (){
             </Tab>
 
             <Tab isActive={myListMatch !== null}>
-              <Link to="/Mypage/MyList">나의 경로 보기</Link>
+              <Link to="/Mypage/MyList">나의 후기 보기</Link>
             </Tab>
           </Tabs>
         

@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 //배경색 배경 길이 정하기
 import { Map } from "react-kakao-maps-sdk";
+import { useHistory } from "react-router-dom";
 
 
 const kakao = window;
@@ -40,7 +41,7 @@ const Banner = styled.div `
 `;
 const Board = styled(motion.div)`
   display: grid;
-  margin-top:-450px;
+  margin-top:-400px;
   grid-template-columns: 1fr 1fr;
 `;
 const Title = styled.h1`
@@ -69,27 +70,6 @@ const MapBox = styled(motion.div)`
     cursor: pointer;
   }
 `;
-const RoadBox = styled(motion.div)`
-  padding: 0px 20px;
-  background: rgba(255, 255, 255, 0.5);
-  width: 500px;
-  height: 450px;
-  margin-right:100px;
-  margin-left:100px;
-  margin-top:40px;
-  border-radius: 30px;
-  box-shadow: 0px 2px 4px black;
-  color: whitesmoke;
-
-  
-  display: flex;
-  //align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  :hover {
-    cursor: pointer;
-  }
-`;
 const CreateForm = styled.form`
   padding: 0px 20px;
 	display: flex;
@@ -102,44 +82,75 @@ const CreateForm = styled.form`
   flex-direction: column;//위아래로 input 창 뜨게 만들기
 `;
 
-const Items = styled.div`
-  position:relative;
-
-`;
-const SelectButton = styled.button`
-		background-color: #aeeaf8;
-    width:15%;
-    font-size:23px;
-    margin-right:10px;
+const Input = styled.input`
+    width: 200px;
+		border: 1;
+		border-radius: 10px;
+		background-color: white;
+		padding: 8px 15px;
+		font-size: 20px;
+		align-items: center;
+		justify-content: center;
+		color: ${(props) => props.theme.textColor};
     margin-bottom:40px;
-  
 `;
+const P = styled.p`
+    align-items: center;
+		justify-content: center;
+		color: ${(props) => props.theme.textColor};
+    flex-direction: column;
+    margin-bottom:10px;
+    //margin-top:50px;
+`;  
+const RoadBox = styled(motion.div)`
+  padding: 0px 20px;
+  background: rgba(255, 255, 255, 0.5);
+  width: 500px;
+  height: 450px;
+  margin-right:100px;
+  margin-left:100px;
+  margin-top:40px;
+  border-radius: 30px;
+  box-shadow: 0px 2px 4px black;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+
 //경로 추천, 경로 저장 버튼 디자인 
 const Button = styled.button`
-		width: 30%;
+		width: 40%;
+    height:40px;
 		background-color: #ffff81;
 		border: none;
 		border-radius: 10px;
 		font-size: 28px;
 		color: ${(props) => props.theme.accentColor};
-    margin-top: 40px;     
-    margin-left:260px;
+    margin-top: 70px;     
+    margin-left:200px;
 
 `;
-
 const Label = styled.label`
   font-size:25px;
   color:black;
-  margin-right:30px;
-  margin-bottom:40px;
+  margin-left:30px;
+  margin-bottom:30px;
 `;
+interface IForm { //start 값의 타입
+  start: string;
+  end: string;
+}
+
 declare global {
   interface Window {
     kakao: any;
   }
 }
 function Road() {
-  //버튼 State
 
   //1) 경로 저장 버튼 눌렀을 때
   const mapBtnclick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -154,9 +165,8 @@ function Road() {
     const { currentTarget: { name }, 
   } = event;
     const target = {name};  
-    console.log("경로가 추천되고 있습니다.");
+    console.log(name);
   }
-//버튼 이름들을 왼쪽 박스로 넘겨주는 실습 해볼 것 
   //3) samle 지도 보여주는 코드 
   
   useEffect(() => {
@@ -171,31 +181,87 @@ function Road() {
 
   }, []);
 
+
+
+  const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
+    mode: "onSubmit",
+    defaultValues: {
+      start:"",
+      end:""
+    },
+  });
+  const history = useHistory();
+
+  const onValid = ({start,end}: IForm) => {
+    console.log(start,"and", end);
+    history.push('/');
+  };
+ 
   return (
     <>
       <Wrapper>
       <Title>따릉이 경로 추천</Title>
         <Banner>
           <Board>
+          <CreateForm>
             <MapBox id="map" >
+            
             </MapBox>
-          
+            <Button  onClick = {mapBtnclick}>경로 저장</Button>
+          </CreateForm>
+           
+            <CreateForm onSubmit={handleSubmit(onValid)} >
             <RoadBox>
-                <Label>서울시 구</Label>
-                <Items>
-                  <SelectButton name = "노원구">노원구</SelectButton>
-                  <SelectButton name = "성북구" >성북구</SelectButton>
-                </Items>
-                <Label>난이도</Label>
-                <Items>
-                  <SelectButton name ="상" >상</SelectButton>
-                  <SelectButton name = "중" >중</SelectButton>
-                  <SelectButton name = "하" >하</SelectButton>
-                </Items>
-                  
-            </RoadBox>
-              <Button  onClick = {mapBtnclick}>경로 저장</Button>
-              <Button onClick = {roadbtnClick}>경로 추천</Button>
+              <P>
+                <Label >출발지 </Label>
+                <Input
+                  id="start"
+                  type="text"
+                  placeholder="출발지를 입력하세요"
+                  {...register("start", {
+                    required: "출발지를 입력하세요",
+                    minLength: {
+                    value: 8,
+                    message: "출발지를 입력하세요.",
+                  },
+              })}
+            />
+            </P>
+                
+              <P>
+                <Label> 도착지 </Label>
+                <Input
+                  id="end"
+                  type="text"
+                  placeholder="도착지를 입력하세요."
+                  {...register("end", {
+                    required: "도착지를 입력하세요",
+                    minLength: {
+                      value: 7,
+                      message: "도착지를 입력하세요"
+                    } ,
+                  })}
+                />
+              </P>
+              <P>
+                <Label> 후기 </Label>
+                <Input
+                  id="review"
+                  type="text"
+                  placeholder="후기를 작성하세요."
+                  {...register("end", {
+                    required: "후기를 작성하세요",
+                    minLength: {
+                      value: 7,
+                      message: "후기를 작성하세요"
+                    } ,
+                  })}
+                />
+              </P>
+             
+              </RoadBox>
+              <Button onClick = {roadbtnClick}> 후기 저장</Button>
+            </CreateForm>            
           </Board>
         </Banner>
       </Wrapper>

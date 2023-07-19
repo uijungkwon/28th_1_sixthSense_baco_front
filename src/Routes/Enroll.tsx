@@ -97,7 +97,10 @@ const Label = styled.label`
   color:black;
   margin-right:30px;
 `;
-
+const Span = styled.span`
+  margin-top:-10px;
+  color:red;
+`;
 function Enroll() {
   const {
     register,
@@ -132,8 +135,9 @@ function Enroll() {
                 },
               })}
             />
-            {errors.email && <small role="alert">{errors.email?.message}</small>}
+            
           </P>
+          {errors.email && <Span>{errors.email?.message}</Span>}
           <P>
             <Label htmlFor="password" style={{ paddingRight:35}}>비밀번호</Label>
             <Input
@@ -144,17 +148,25 @@ function Enroll() {
                 !isDirty ? undefined : errors.password ? "true" : "false"
               }
               {...register("password", {
-                required: "        비밀번호는 필수 입력입니다.",
+                required: "비밀번호는 필수 입력입니다.",
                 minLength: {
                   value: 8,
-                  message: "        8자리 이상 비밀번호를 사용하세요.",
+                  message: "8자리 이상 비밀번호를 사용하세요.",
                 },
+                validate: {
+                  check: (val) => {
+                  if (getValues("password") !== val) {
+                      return "비밀번호가 일치하지 않습니다.";
+                  }
+                  },
+              },
               })}
             />
-            {errors.password && (
-              <small role="alert">{errors.password?.message}</small>
-            )}
+           
           </P>
+          {errors.password && (
+              <Span>{errors.password?.message}</Span>
+            )}
           <P>
             <Label htmlFor="password">비밀번호 확인</Label>
             <Input
@@ -176,10 +188,11 @@ function Enroll() {
                 }
               })}
             />
-            {errors?.passwordConfirm && (
-              <small role="alert">{errors.passwordConfirm.message}</small>
-            )}
+            
           </P>
+          {errors?.passwordConfirm && (
+              <Span>{errors.passwordConfirm.message}</Span>
+            )}
           <Button onClick={handleSubmit(onSubmit)}>회원가입 </Button>
         </Container>
       </Box>

@@ -7,11 +7,13 @@ import Enroll from "./Routes/Enroll";
 import Login from "./Routes/Login";
 import Update from "./Routes/Update";
 import MyList from "./Routes/MyList";
+import Review from "./Routes/Review";
 function App(){
   return (
     <Router>
       <Header />
       <Switch>
+       <Route path = "/Review"><Review/></Route>
         <Route path = "/Road"><Road/></Route>
         <Route path = "/Mypage"><Mypage /></Route>
         <Route path = "/Enroll"><Enroll/></Route>

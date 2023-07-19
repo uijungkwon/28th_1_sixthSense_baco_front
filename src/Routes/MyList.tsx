@@ -1,9 +1,11 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence,useScroll } from "framer-motion";
 import { styled } from "styled-components";
 import PropTypes from 'prop-types';
 import { useEffect,useRef, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 import Road from "./Road";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { isConstructorDeclaration } from "typescript";
 
 
 const Container = styled.div`
@@ -21,6 +23,56 @@ const Wrapper = styled(motion.div)`
   //overflow-x: hidden;
   background-color:white;
 `;
+//sample로 어떻게 만들지 구성!!!
+const Slider = styled.div`
+  position: relative;
+  top: -100px;
+`;
+
+const Row = styled(motion.div)`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
+`;
+
+const Box = styled(motion.div)`
+  background: #aeeaf8;
+  width: 400px;
+  height: 70px;
+  //margin-right:120px;
+  //margin-left:120px;
+  margin-top:40px;
+  border-radius: 30px;
+  box-shadow: 0px 2px 4px black;
+  color: black;
+  
+  cursor:pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  :hover {
+    cursor: pointer;
+  }
+`;
+const rowVariants = {
+  hidden: {
+    x: window.outerWidth + 10,
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: -window.outerWidth - 10,
+  },
+};
+
+
+
+
+/*
 const Box = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
   width: 600px;
@@ -39,6 +91,12 @@ const Box = styled(motion.div)`
   :hover {
     cursor: pointer;
   }
+`;
+*/
+const ListBox = styled(motion.div)`
+  width: 100px;
+  height: 100px;
+
 `;
 const Ul = styled.ul`
     color:black;
@@ -94,10 +152,37 @@ const ModalBox = styled(motion.div)`
   margin-top:-100px;
 
 `;
-declare global {
-  interface Window {
-    kakao: any;
-  }
+const Overlay = styled(motion.div)`
+  position:fixed;
+  opacity:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-color: rgba(0,0,0,0.5);
+`;
+const BigBox = styled(motion.div)`
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  background-Color: whitesmoke;
+  border-radius:20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+`;
+const H1 = styled.h1`
+
+
+`;
+interface IRoad {
+  id: string;
+  start:string;
+  end: string;
 }
 function MyList(){
       //2) 모달 박스 띄우기 위해 해당 버튼을 눌렀는지 확인하는 코드
@@ -108,72 +193,66 @@ function MyList(){
       };
 
     //1) 백엔드에서 가져온 데이터라고 가정
-    const myRoad = [{id:"1" ,start: "숙대",end:"한강"}, {id:"2", start: "용산",end: "남산"}, {id:"3",start: "롯데타워",end: "양화대교"}];
-    const [clicked, setClicked] = useState("");
+    const history = useHistory();
+    const myRoad = [{id:1 ,start: "숙대입구",end:"한강"}, {id:2,start: "성수역",end:"용산역"}, {id:3,start: "뚝섬",end:"남산"},];
 
+    //1-1) 하나의 박스(저장 경로) 를 선택했을 때 나타나는 동작 설정  
+    const onBoxClicked = (itemId: number)=>{
+      history.push(`/Mypage/MyList/${itemId}`)
+      console.log(`${itemId}` );
+    }
 
+    const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Mypage/MyList/:itemId");
+    const onOverlayClick = ()=> history.push("/Mypage/MyList/");
+    const {scrollY} = useScroll();
+    const clickedBox = bigRoadMatch?.params.itemId && myRoad.find((item) => item.id === +bigRoadMatch.params.itemId);
+    console.log(clickedBox); 
+    
     return (
        <>
         <Wrapper>
-            <Box >
-              <Ul>
-              {myRoad.map( (road) => {
-                    return(//클릭한 번호 정보 넘겨 받아야함
-                      <>
-                        <Li  >
-                          <Button id = {road.id} onClick = {openModalHandler}>{road.id} : 출발지- { road.start }  , 도착지- { road.end }</Button>
-                          
-                          </Li>
-                        
-                      </>
-                    );
-                    
-                })}
-            </Ul> 
-            {isOpen ? 
-                (
-                <ModalOverlay onClick = {openModalHandler}>
-                  <ModalBox>
-
-                  </ModalBox>
-                </ModalOverlay>
-                )
-                 : null}
-            </Box>
+            <AnimatePresence>
+              
+                <Ul>
+                  <li>{myRoad.map((item) => (
+                  <Box 
+                   layoutId={item.id + ""}
+                   key={item.id}
+                   onClick = {()=> onBoxClicked(item.id)}
+                   >
+                  id : {item.id}
+                  </Box>
+                ))}</li>
+                </Ul>
+                
+            </AnimatePresence>
+            <AnimatePresence>
+            
+            {bigRoadMatch ? (
+              <>
+              <Overlay 
+                onClick = {onOverlayClick}
+                exit = {{opacity:0}}
+                animate = {{opacity: 1}}
+              />
+              <BigBox
+                layoutId={bigRoadMatch.params.itemId}
+                style = {{top:scrollY.get() + 100, }}
+              >
+              {
+                clickedBox && 
+                (<>
+                <h1 style = {{color:"black"}}>출발지: {clickedBox.start} , 도착지 :{clickedBox.end}</h1>  
+                </>)
+              }
+              <H1 color = "red">후기 남기기</H1>
+              </BigBox>
+            </>
+            ) : null}
+            
+          </AnimatePresence>
         </Wrapper>
        </>
     );
 }
 export default MyList;
-/*
-
-alphaBtn.map((item) => {
-          return (
-            <button
-              onClick={(e) => {
-                setAlphabet(e.target.value);
-              }}
-              value={item}
-            >
-              {item}
-            </button>
-          );
-        })
-
-
-{myRoad.map( (road) => {
-                    return(//클릭한 번호 정보 넘겨 받아야함
-                      <>
-                        <Li  >
-                          <Button key = {road.id} onClick = {openModalHandler}>{road.id} : 출발지- { road.start }  , 도착지- { road.end }</Button>
-                          
-                          </Li>
-                        
-                      </>
-                    );
-                    
-                })}
-
-});
-                
-*/

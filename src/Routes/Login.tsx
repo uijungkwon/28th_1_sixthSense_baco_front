@@ -94,7 +94,10 @@ const Label = styled.label`
   color:black;
   margin-right:30px;
 `;
-
+const Span = styled.span`
+  margin-top:-20px;
+  color:red;
+`;
 function Login({
   onSubmit = (data: FormData) => {
     return new Promise<void>((resolve) => {
@@ -133,8 +136,9 @@ function Login({
             },
           })}
         />
-        {errors.email && <small role="alert">{errors.email?.message}</small>}
+        
         </P>
+        {errors.email && <Span>{errors.email?.message}</Span>}
         <P>
         <Label htmlFor="password">비밀번호</Label>
         <Input
@@ -152,10 +156,11 @@ function Login({
             },
           })}
         />
-        {errors.password && (
-          <small role="alert">{errors.password?.message}</small>
-        )}
+        
         </P>
+        {errors.password && (
+          <Span>{errors.password?.message}</Span>
+        )}
         <Button type="submit" disabled={isSubmitting}>
           로그인 
         </Button>
