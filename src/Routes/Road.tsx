@@ -8,10 +8,12 @@ import {
 } from "framer-motion";
 import React from 'react';
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 //배경색 배경 길이 정하기
 import { Map } from "react-kakao-maps-sdk";
 import { useHistory } from "react-router-dom";
+import { contentState } from "./atoms";
+import { roadState } from "../atoms";
 
 
 const kakao = window;
@@ -89,18 +91,33 @@ const Input = styled.input`
 		background-color: white;
 		padding: 8px 15px;
 		font-size: 20px;
+    margin-left:10px;
 		align-items: center;
 		justify-content: center;
 		color: ${(props) => props.theme.textColor};
     margin-bottom:40px;
 `;
-const P = styled.p`
-    align-items: center;
-		justify-content: center;
+const ReviewInput = styled.input`
+    width:280px;
+    height:100px;
+		border: 1;
+		border-radius: 10px;
+		background-color: white;
+		padding: 8px 15px;
+		font-size: 20px;
+		//align-items: center;
+		//justify-content: center;
 		color: ${(props) => props.theme.textColor};
-    flex-direction: column;
+    margin-left:50px;
+    margin-top:10px;
+`;
+const P = styled.p`
+    //align-items: center;
+		//justify-content: center;
+		color: ${(props) => props.theme.textColor};
+    //flex-direction: column;
     margin-bottom:10px;
-    //margin-top:50px;
+    margin-top:20px;
 `;  
 const RoadBox = styled(motion.div)`
   padding: 0px 20px;
@@ -135,14 +152,18 @@ const Button = styled.button`
 
 `;
 const Label = styled.label`
+  background-color: #bbe1fad2;
+  border-radius: 10px;
+  width:15%;
   font-size:25px;
   color:black;
-  margin-left:30px;
-  margin-bottom:30px;
+  margin-left:50px;
+  margin-top:20px;
 `;
-interface IForm { //start 값의 타입
+interface IForm { //recoil로 만들어서 변수 사용할 수 있도록 만들기
   start: string;
   end: string;
+  review:string;
 }
 
 declare global {
@@ -151,65 +172,80 @@ declare global {
   }
 }
 function Road() {
-
-  //1) 경로 저장 버튼 눌렀을 때
+  /*  //마우스 클릭 이벤트 -> name 가져오기
   const mapBtnclick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { currentTarget: { name },
     } = event;
     const target = {name};  //버튼 정보가 넘어가야함
     console.log("경로가 저장되었습니다.");
   }
+*/
 
-  //2) 경로 추천 버튼 눌렀을 때
-  const roadbtnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { currentTarget: { name }, 
-  } = event;
-    const target = {name};  
-    console.log(name);
-  }
-  //3) samle 지도 보여주는 코드 
+  //1) map 보여주기
+  const kakaoAPI = window.kakao.maps;
+  const [Map, setMap] = useState();
+  const [state, setState] = useState()
+
+  const options = { //지도를 생성할 때 필요한 기본 옵션
+    center: new kakaoAPI.LatLng( 37.54365822551167,  126.97226557852383), //지도의 중심좌표.
+    level: 4 //지도의 레벨(확대, 축소 정도)
+  };
+
+  //const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+  const container = useRef(null);
   
   useEffect(() => {
-
-    let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-    let options = { //지도를 생성할 때 필요한 기본 옵션
-      center: new window.kakao.maps.LatLng( 37.54365822551167,  126.97226557852383), //지도의 중심좌표.
-      level: 3 //지도의 레벨(확대, 축소 정도)
-    };
-
-    const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-
+    //const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    setMap(new kakaoAPI.Map(container.current, options));
   }, []);
+//////
 
 
-
+///////
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
       start:"",
-      end:""
+      end:"",
+      review:"",
     },
   });
   const history = useHistory();
 
-  const onValid = ({start,end}: IForm) => {
-    console.log(start,"and", end);
-    history.push('/');
+  const [road, setRoad] = useRecoilState(roadState);
+  const [count,setCount]  = useState(0);
+
+  const onValid = ({start,end, review}: IForm) => {
+    //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
+    setCount((count) => count+1);
+    setRoad((oldRoad) => {
+     return  [{id:count, start:start, end:end, review:review}, ...oldRoad]
+    });
+    //[{id: Date.now()+"", start: start, end:end, review:review, }, ...oldRoad]
+    setValue("start", "");
+    setValue("end", "");
+    setValue("review", "");
+    
+    //console.log(road);
   };
  
   return (
     <>
       <Wrapper>
-      <Title>따릉이 경로 추천</Title>
+      <Title>후기 작성</Title>
         <Banner>
           <Board>
           <CreateForm>
-            <MapBox id="map" >
-            
+            <MapBox 
+            id="map" 
+            ref = {container} 
+            >
             </MapBox>
-            <Button  onClick = {mapBtnclick}>경로 저장</Button>
+            <Button >경로 보기</Button>
           </CreateForm>
            
+
+
             <CreateForm onSubmit={handleSubmit(onValid)} >
             <RoadBox>
               <P>
@@ -220,15 +256,10 @@ function Road() {
                   placeholder="출발지를 입력하세요"
                   {...register("start", {
                     required: "출발지를 입력하세요",
-                    minLength: {
-                    value: 8,
-                    message: "출발지를 입력하세요.",
-                  },
               })}
             />
-            </P>
-                
-              <P>
+              </P>
+              <P>  
                 <Label> 도착지 </Label>
                 <Input
                   id="end"
@@ -236,32 +267,23 @@ function Road() {
                   placeholder="도착지를 입력하세요."
                   {...register("end", {
                     required: "도착지를 입력하세요",
-                    minLength: {
-                      value: 7,
-                      message: "도착지를 입력하세요"
-                    } ,
                   })}
                 />
               </P>
-              <P>
                 <Label> 후기 </Label>
-                <Input
+                <ReviewInput
                   id="review"
                   type="text"
                   placeholder="후기를 작성하세요."
-                  {...register("end", {
+                  {...register("review", {
                     required: "후기를 작성하세요",
-                    minLength: {
-                      value: 7,
-                      message: "후기를 작성하세요"
-                    } ,
                   })}
                 />
-              </P>
-             
               </RoadBox>
-              <Button onClick = {roadbtnClick}> 후기 저장</Button>
-            </CreateForm>            
+              <Button > 후기 저장</Button>
+            </CreateForm>   
+
+
           </Board>
         </Banner>
       </Wrapper>

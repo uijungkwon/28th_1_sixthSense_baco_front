@@ -1,12 +1,10 @@
 import { motion, AnimatePresence,useScroll } from "framer-motion";
 import { styled } from "styled-components";
-import PropTypes from 'prop-types';
 import { useEffect,useRef, useState } from "react";
-import { Map } from "react-kakao-maps-sdk";
-import Road from "./Road";
 import { useHistory, useRouteMatch } from "react-router-dom";
-import { isConstructorDeclaration } from "typescript";
-
+import { contentState } from "./atoms";
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { roadState } from "../atoms";
 
 const Container = styled.div`
   display: flex;
@@ -175,15 +173,17 @@ const BigBox = styled(motion.div)`
   flex-direction: column;
 
 `;
-const H1 = styled.h1`
-
-
+const Div = styled.div`
+  background-color: pink;
+  margin-top: -150px;
+  margin-bottom:60px;
+  width:450px;
+  height:300px;
 `;
-interface IRoad {
-  id: string;
-  start:string;
-  end: string;
-}
+const H1 = styled.h1`
+  font-size:25px;
+  color:black;
+`;
 function MyList(){
       //2) 모달 박스 띄우기 위해 해당 버튼을 눌렀는지 확인하는 코드
       const [isOpen, setIsOpen] = useState(false);
@@ -198,17 +198,68 @@ function MyList(){
 
     //1-1) 하나의 박스(저장 경로) 를 선택했을 때 나타나는 동작 설정  
     const onBoxClicked = (itemId: number)=>{
-      history.push(`/Mypage/MyList/${itemId}`)
-      console.log(`${itemId}` );
+      history.push(`/Mypage/MyList/${itemId}`);
     }
-
+      
+  //recoil 사용 선언부!! id, start, end , review 가져옴
+    const [road, setRoad] = useRecoilState(roadState);
     const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Mypage/MyList/:itemId");
+
+    const clickedBox = bigRoadMatch?.params.itemId && road.find((item) => item.id === +bigRoadMatch.params.itemId);
+    
     const onOverlayClick = ()=> history.push("/Mypage/MyList/");
     const {scrollY} = useScroll();
-    const clickedBox = bigRoadMatch?.params.itemId && myRoad.find((item) => item.id === +bigRoadMatch.params.itemId);
-    console.log(clickedBox); 
-    
     return (
+       <>
+        <Wrapper>
+            <AnimatePresence>
+              
+                <Ul>
+                  <li>{road.map((item) => (
+                  <Box 
+                   layoutId={item.id +"road"}
+                   key={item.id}
+                   onClick = {()=> onBoxClicked(item.id)}
+                   >
+                   번호: {item.id} 출발지: {item.start} 도착지: {item.end} 
+                  </Box>
+                ))}</li>
+                </Ul>
+                
+            </AnimatePresence>
+
+            <AnimatePresence>
+            
+            {bigRoadMatch ? (
+              <>
+              <Overlay 
+                onClick = {onOverlayClick}
+                exit = {{opacity:0}}
+                animate = {{opacity: 1}}
+              />
+              <BigBox
+                layoutId={bigRoadMatch.params.itemId+"road"}
+                style = {{top:scrollY.get() + 100, }}
+              >
+              {
+                clickedBox && 
+                (<>
+                <Div ></Div>
+                <H1 > 후기 : {clickedBox.review}</H1>
+                </>)
+              }
+              </BigBox>
+            </>
+            ) : null}
+            
+          </AnimatePresence>
+        </Wrapper>
+       </>
+    );
+}
+export default MyList;
+/*
+return (
        <>
         <Wrapper>
             <AnimatePresence>
@@ -220,12 +271,13 @@ function MyList(){
                    key={item.id}
                    onClick = {()=> onBoxClicked(item.id)}
                    >
-                  id : {item.id}
+                    {content.start}
                   </Box>
                 ))}</li>
                 </Ul>
                 
             </AnimatePresence>
+
             <AnimatePresence>
             
             {bigRoadMatch ? (
@@ -245,7 +297,6 @@ function MyList(){
                 <h1 style = {{color:"black"}}>출발지: {clickedBox.start} , 도착지 :{clickedBox.end}</h1>  
                 </>)
               }
-              <H1 color = "red">후기 남기기</H1>
               </BigBox>
             </>
             ) : null}
@@ -254,5 +305,4 @@ function MyList(){
         </Wrapper>
        </>
     );
-}
-export default MyList;
+*/

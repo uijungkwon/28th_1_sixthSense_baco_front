@@ -35,7 +35,7 @@ import {
 const LogoItems = styled.ul`
   display: flex;
   align-items: center;
-  width: 630px;
+  width: 500px;
 `;
   const LogoItem = styled.li`
     display: flex;
@@ -57,9 +57,7 @@ const LogoItems = styled.ul`
   const Items = styled.ul`
     display: flex;
     align-items: center;
-
-    font-family: "Hanna";
-  
+    font-family: "Hanna"; 
     color: ${(props) => props.theme.white.darker};
     transition: color 0.3 ease-in-out;
     &:hover {
@@ -67,7 +65,7 @@ const LogoItems = styled.ul`
     }
   `;
   const Item = styled.li`
-    margin-right: 70px;
+    margin-right: 50px;
     display: flex;
     position: relative;
     justify-content: center;
@@ -79,7 +77,7 @@ const LogoItems = styled.ul`
 
 // 3) 회원가입/로그인 화면
   const LogItems = styled.ul`
-  margin-left: 200px;
+  margin-left: 250px;
   display: flex;
   align-items: center;
   font-size:12px;
@@ -113,6 +111,7 @@ const LogoItems = styled.ul`
     const roadMatch = useRouteMatch("/Road");
     const enrollMatch = useRouteMatch("/Enroll");
     const loginMatch = useRouteMatch("/Login");
+    const reviewMatch = useRouteMatch("/Review");
     
     //3) 로고 클릭시 홈으로 이동
     const history = useHistory();
@@ -137,8 +136,6 @@ const LogoItems = styled.ul`
     return (
     <>
       <Nav
-       //initial={{ backgroundColor: "#bbe1fad2" }}
-       //animate={navAnimation}
       >
         <Col>
         <LogoItems>
@@ -167,7 +164,7 @@ const LogoItems = styled.ul`
             </Item>
             <Item>
               <Link to="/Review">
-                후기 공유 게시판 {myPageMatch ? <Circle layoutId="circle" /> : null}
+                후기 공유 게시판 {reviewMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
             </Items>

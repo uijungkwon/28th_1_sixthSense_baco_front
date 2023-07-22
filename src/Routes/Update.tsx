@@ -60,7 +60,7 @@ const Button = styled.button`
 		border-radius: 10px;
 		font-size: 20px;
 		color: ${(props) => props.theme.accentColor};
-    margin-top: 130px;
+    margin-top: 60px;
     margin-left:110px;      
 
 `;
@@ -82,6 +82,7 @@ const Span = styled.span`
   color:red;
 `;
 interface IForm { //start 값의 타입
+  name:string;
   password: string;
   passwordConfirm: string;
 }
@@ -90,12 +91,13 @@ function Update() {
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
+      name:"",
       password:"",
       passwordConfirm:""
     },
   });
-  const onValid = ({password,passwordConfirm}: IForm) => {
-    console.log(password,"and", passwordConfirm);
+  const onValid = ({name,password,passwordConfirm}: IForm) => {
+    console.log(name,"and", password,"and", passwordConfirm);
     history.push('/');
   };
   const history = useHistory();
@@ -105,12 +107,23 @@ function Update() {
     <Wrapper>
       <Box >
         <CreateForm onSubmit={handleSubmit(onValid)} >
+        <P>
+                <Label style={{ paddingRight:50}}>닉네임 </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="변경 할 닉네임을 입력하세요"
+                  {...register("name", {
+                    required: "닉네임을 입력하세요",
+                  })}
+                />
+              </P>
               <P>
                 <Label style={{ paddingRight:35}}>비밀번호 </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="********"
+                  placeholder="변경할 비밀번호를 입력하세요"
                   aria-invalid={
                   !isDirty ? undefined : errors.password ? "true" : "false"
                   }
@@ -139,7 +152,7 @@ function Update() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="********"
+                  placeholder="비밀번호를 한번 더 입력하세요"
                   {...register("passwordConfirm", {
                     required: "비밀번호 확인은 필수입니다.",
                     minLength: {
@@ -159,6 +172,7 @@ function Update() {
               {errors?.passwordConfirm && (
               <Span>{errors.passwordConfirm.message}</Span>
             )}
+            
               <Button >수정 완료</Button>
             </CreateForm>
           </Box>
