@@ -194,8 +194,6 @@ function MyList(){
 
     //1) 백엔드에서 가져온 데이터라고 가정
     const history = useHistory();
-    const myRoad = [{id:1 ,start: "숙대입구",end:"한강"}, {id:2,start: "성수역",end:"용산역"}, {id:3,start: "뚝섬",end:"남산"},];
-
     //1-1) 하나의 박스(저장 경로) 를 선택했을 때 나타나는 동작 설정  
     const onBoxClicked = (itemId: number)=>{
       history.push(`/Mypage/MyList/${itemId}`);
@@ -221,7 +219,7 @@ function MyList(){
                    key={item.id}
                    onClick = {()=> onBoxClicked(item.id)}
                    >
-                   번호: {item.id} 출발지: {item.start} 도착지: {item.end} 
+                   번호: {item.id} , 출발지: {item.start} , 도착지: {item.end} 
                   </Box>
                 ))}</li>
                 </Ul>
@@ -258,51 +256,3 @@ function MyList(){
     );
 }
 export default MyList;
-/*
-return (
-       <>
-        <Wrapper>
-            <AnimatePresence>
-              
-                <Ul>
-                  <li>{myRoad.map((item) => (
-                  <Box 
-                   layoutId={item.id + ""}
-                   key={item.id}
-                   onClick = {()=> onBoxClicked(item.id)}
-                   >
-                    {content.start}
-                  </Box>
-                ))}</li>
-                </Ul>
-                
-            </AnimatePresence>
-
-            <AnimatePresence>
-            
-            {bigRoadMatch ? (
-              <>
-              <Overlay 
-                onClick = {onOverlayClick}
-                exit = {{opacity:0}}
-                animate = {{opacity: 1}}
-              />
-              <BigBox
-                layoutId={bigRoadMatch.params.itemId}
-                style = {{top:scrollY.get() + 100, }}
-              >
-              {
-                clickedBox && 
-                (<>
-                <h1 style = {{color:"black"}}>출발지: {clickedBox.start} , 도착지 :{clickedBox.end}</h1>  
-                </>)
-              }
-              </BigBox>
-            </>
-            ) : null}
-            
-          </AnimatePresence>
-        </Wrapper>
-       </>
-    );
-*/

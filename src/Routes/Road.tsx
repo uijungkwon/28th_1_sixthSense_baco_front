@@ -172,25 +172,17 @@ declare global {
   }
 }
 function Road() {
-  /*  //마우스 클릭 이벤트 -> name 가져오기
-  const mapBtnclick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { currentTarget: { name },
-    } = event;
-    const target = {name};  //버튼 정보가 넘어가야함
-    console.log("경로가 저장되었습니다.");
-  }
-*/
-
   //1) map 보여주기
   const kakaoAPI = window.kakao.maps;
-  const [Map, setMap] = useState();
+  const [map, setMap] = useState<any>();
+  const [marker, setMarker] = useState<any>();
   const [state, setState] = useState()
 
+  //카카오 맵 
   const options = { //지도를 생성할 때 필요한 기본 옵션
     center: new kakaoAPI.LatLng( 37.54365822551167,  126.97226557852383), //지도의 중심좌표.
     level: 4 //지도의 레벨(확대, 축소 정도)
   };
-
   //const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
   const container = useRef(null);
   
@@ -198,10 +190,7 @@ function Road() {
     //const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     setMap(new kakaoAPI.Map(container.current, options));
   }, []);
-//////
-
-
-///////
+  
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
@@ -211,22 +200,21 @@ function Road() {
     },
   });
   const history = useHistory();
-
   const [road, setRoad] = useRecoilState(roadState);
-  const [count,setCount]  = useState(0);
+  const [count,setCount]  = useState(1);
 
   const onValid = ({start,end, review}: IForm) => {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
-    setCount((count) => count+1);
+    
     setRoad((oldRoad) => {
-     return  [{id:count, start:start, end:end, review:review}, ...oldRoad]
+     setCount((count) => count+1);
+     console.log(count);
+     return  [...oldRoad,{id:count, start:start, end:end, review:review}]
     });
-    //[{id: Date.now()+"", start: start, end:end, review:review, }, ...oldRoad]
     setValue("start", "");
     setValue("end", "");
     setValue("review", "");
-    
-    //console.log(road);
+    console.log(road);
   };
  
   return (
@@ -243,9 +231,6 @@ function Road() {
             </MapBox>
             <Button >경로 보기</Button>
           </CreateForm>
-           
-
-
             <CreateForm onSubmit={handleSubmit(onValid)} >
             <RoadBox>
               <P>

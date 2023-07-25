@@ -111,7 +111,7 @@ const LogoItems = styled.ul`
     const roadMatch = useRouteMatch("/Road");
     const enrollMatch = useRouteMatch("/Enroll");
     const loginMatch = useRouteMatch("/Login");
-    const reviewMatch = useRouteMatch("/Review");
+    const reviewMatch = useRouteMatch("/LandingPage");
     
     //3) 로고 클릭시 홈으로 이동
     const history = useHistory();
@@ -163,7 +163,7 @@ const LogoItems = styled.ul`
               </Link>
             </Item>
             <Item>
-              <Link to="/Review">
+              <Link to="/LandingPage">
                 후기 공유 게시판 {reviewMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>

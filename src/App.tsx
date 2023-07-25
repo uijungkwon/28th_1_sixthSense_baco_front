@@ -8,12 +8,14 @@ import Login from "./Routes/Login";
 import Update from "./Routes/Update";
 import MyList from "./Routes/MyList";
 import Review from "./Routes/Review";
+import LandingPage from "./Routes/LandingPage";
+
 function App(){
   return (
     <Router>
       <Header />
       <Switch>
-       <Route path = "/Review"><Review/></Route>
+       <Route path = "/LandingPage"><LandingPage/></Route>
         <Route path = "/Road"><Road/></Route>
         <Route path = "/Mypage"><Mypage /></Route>
         <Route path = "/Enroll"><Enroll/></Route>
