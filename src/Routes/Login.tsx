@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import {  isEmailAtom, isLoginAtom } from "../atoms";
+import { useRecoilState } from "recoil";
 
 type FormData = {
   email: string;
@@ -98,22 +101,25 @@ const Span = styled.span`
   margin-top:-20px;
   color:red;
 `;
-function Login({
-  onSubmit = (data: FormData) => {
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(data));
-        resolve();
-      }, 1000);
-    });
-  },
-}) {
+function Login() {
+
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm<FormData>(); // Specify the generic type here
+ const history = useHistory();
+ const [state,setState] = useRecoilState(isLoginAtom);
+ const [mail,setEmail] = useRecoilState(isEmailAtom);
 
+   const onSubmit = (data: FormData) => {
+    //console.log(data);
+    setState((prev) => !(prev) );
+    setEmail((mail) => data.email);
+    history.push('/');
+  }; 
+  
+  
   return (
     <Wrapper>
       <Header>

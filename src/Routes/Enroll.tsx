@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 interface FormValue {
@@ -109,8 +110,10 @@ function Enroll() {
     getValues
   } = useForm<FormValue>();
 
+  const history = useHistory();
   const onSubmit = (data: FormValue) => {
     console.log(data);
+    history.push('/Login');
   };
 
   return (
@@ -125,7 +128,7 @@ function Enroll() {
             <Input
               id="email"
               type="text"
-              placeholder="test@email.com"
+              placeholder="test@gmail.com"
               aria-invalid={!isDirty ? undefined : errors.email ? "true" : "false"}
               {...register("email", {
                 required: "        이메일은 필수 입력입니다.",

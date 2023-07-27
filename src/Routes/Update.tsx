@@ -82,7 +82,6 @@ const Span = styled.span`
   color:red;
 `;
 interface IForm { //start 값의 타입
-  name:string;
   password: string;
   passwordConfirm: string;
 }
@@ -91,13 +90,12 @@ function Update() {
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
-      name:"",
       password:"",
       passwordConfirm:""
     },
   });
-  const onValid = ({name,password,passwordConfirm}: IForm) => {
-    console.log(name,"and", password,"and", passwordConfirm);
+  const onValid = ({password,passwordConfirm}: IForm) => {
+    //console.log(name,"and", password,"and", passwordConfirm);
     history.push('/');
   };
   const history = useHistory();
@@ -107,17 +105,6 @@ function Update() {
     <Wrapper>
       <Box >
         <CreateForm onSubmit={handleSubmit(onValid)} >
-        <P>
-                <Label style={{ paddingRight:50}}>닉네임 </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="변경 할 닉네임을 입력하세요"
-                  {...register("name", {
-                    required: "닉네임을 입력하세요",
-                  })}
-                />
-              </P>
               <P>
                 <Label style={{ paddingRight:35}}>비밀번호 </Label>
                 <Input
@@ -182,58 +169,3 @@ function Update() {
 }
 
 export default Update;
-/*
-<P>
-            <Label htmlFor="password" style={{ paddingRight:35}}>비밀번호</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="********"
-              aria-invalid={
-                !isDirty ? undefined : errors.password ? "true" : "false"
-              }
-              {...register("password", {
-                required: "        비밀번호는 필수 입력입니다.",
-                minLength: {
-                  value: 8,
-                  message: "        8자리 이상 비밀번호를 사용하세요.",
-                },
-                validate: {
-                  check: (val) => {
-                  if (getValues("password") !== val) {
-                      return "비밀번호가 일치하지 않습니다.";
-                  }
-                  },
-              },
-              })}
-            />
-            {errors.password && (
-              <small role="alert">{errors.password?.message}</small>
-            )}
-          </P>
-          <P>
-            <Label htmlFor="password">비밀번호 확인</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="********"
-              {...register("passwordConfirm", {
-                required: "        비밀번호 확인은 필수입니다.",
-                minLength: {
-                  value: 7,
-                  message: "        최소 8자 이상의 비밀번호를 사용하세요."
-                },
-                validate: {
-                  check: (val) => {
-                    if (getValues("password") !== val) {
-                      return "비밀번호가 같지 않습니다.";
-                    }
-                  }
-                }
-              })}
-            />
-            {errors?.passwordConfirm && (
-              <small role="alert">{errors.passwordConfirm.message}</small>
-            )}
-          </P>
-*/

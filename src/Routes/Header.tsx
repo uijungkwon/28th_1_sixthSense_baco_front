@@ -8,6 +8,8 @@ import {
   import { Link, useHistory, useRouteMatch } from "react-router-dom";
   import styled from "styled-components";
   import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import { isEmailAtom, isLoginAtom } from "../atoms";
 
   const bike = require("../images/bike.png");
   interface IForm {
@@ -132,7 +134,10 @@ const LogoItems = styled.ul`
         });
       }
     });
-    
+
+    const state = useRecoilValue(isLoginAtom);
+    const email = useRecoilValue(isEmailAtom);
+
     return (
     <>
       <Nav
@@ -169,16 +174,27 @@ const LogoItems = styled.ul`
             </Item>
             </Items>
             <LogItems>
-            <LogItem>
-              <Link to="/Enroll">
-                회원 가입 {enrollMatch ? <Circle layoutId="circle" /> : null}
-              </Link>
-            </LogItem>
-            <LogItem>
-              <Link to="/Login">
-                로그인 {loginMatch ? <Circle layoutId="circle" /> : null}
-              </Link>
+            { state ?(
+              <LogItem style = {{marginLeft:"-20px"}}>
+               {email}님
              </LogItem>
+            ) :(
+              <>
+              <LogItem>
+               <Link to="/Enroll">
+                 회원 가입 {enrollMatch ? <Circle layoutId="circle" /> : null}
+               </Link>
+             </LogItem>
+             <LogItem>
+               <Link to="/Login">
+                 로그인 {loginMatch ? <Circle layoutId="circle" /> : null}
+               </Link>
+              </LogItem>
+             </>
+            )
+            
+            }
+            
             </LogItems>
         </Col>
       </Nav>
