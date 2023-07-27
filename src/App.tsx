@@ -15,7 +15,7 @@ function App(){
     <Router>
       <Header />
       <Switch>
-       <Route path = "/LandingPage"><LandingPage/></Route>
+       <Route path = "/Review"><Review/></Route>
         <Route path = "/Road"><Road/></Route>
         <Route path = "/Mypage"><Mypage /></Route>
         <Route path = "/Enroll"><Enroll/></Route>

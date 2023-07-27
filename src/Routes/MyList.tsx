@@ -6,41 +6,18 @@ import { contentState } from "./atoms";
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { roadState } from "../atoms";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
 const Wrapper = styled(motion.div)`
-  //height: 110vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  //overflow-x: hidden;
   background-color:white;
-`;
-//sample로 어떻게 만들지 구성!!!
-const Slider = styled.div`
-  position: relative;
-  top: -100px;
-`;
-
-const Row = styled(motion.div)`
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(6, 1fr);
-  position: absolute;
-  width: 100%;
 `;
 
 const Box = styled(motion.div)`
-  background: #aeeaf8;
-  width: 400px;
+  background: #c4f0fadf;
+  width: 500px;
   height: 70px;
-  //margin-right:120px;
-  //margin-left:120px;
   margin-top:40px;
   border-radius: 30px;
   box-shadow: 0px 2px 4px black;
@@ -55,101 +32,12 @@ const Box = styled(motion.div)`
     cursor: pointer;
   }
 `;
-const rowVariants = {
-  hidden: {
-    x: window.outerWidth + 10,
-  },
-  visible: {
-    x: 0,
-  },
-  exit: {
-    x: -window.outerWidth - 10,
-  },
-};
 
-
-
-
-/*
-const Box = styled(motion.div)`
-  background: rgba(255, 255, 255, 0.5);
-  width: 600px;
-  height: 400px;
-  margin-right:120px;
-  margin-left:120px;
-  margin-top:40px;
-  border-radius: 30px;
-  box-shadow: 0px 2px 4px black;
-  color: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  :hover {
-    cursor: pointer;
-  }
-`;
-*/
-const ListBox = styled(motion.div)`
-  width: 100px;
-  height: 100px;
-
-`;
 const Ul = styled.ul`
     color:black;
 `;
-const Li = styled.li`
-    font-size:23px;
-    color:black;
-    &:hover{
-	  color: blue; //목록에 가져다 대면 파란색으로 변경
-  }
-`;
-const Button = styled.button`
-		height:30px;
-    width:500px;
-		background-color: #b3f4ff;
-		border: none;
-		border-radius: 10px;
-		font-size: 28px;
-		color: ${(props) => props.theme.accentColor};
-    margin-bottom:10px;   
-    align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
+
 ////"경로 모달 박스 만들기!!"
-const ModalContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-flow: row wrep;
-  justify-content: center;
-  align-items: center;
-`;
-const ModalOverlay = styled.div`
-  width: 100%;
-  height: 140%;
-  position: fixed;
-  display: flex;
-  flex-flow: row wrep;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-`;
-
-const ModalBox = styled(motion.div)`
-  width: 500px;
-  height: 400px;
-  text-align: center;
-  text-decoration: none;
-  padding: 30px 90px;
-  background-color: white;
-  border-radius: 30px;
-  margin-top:-100px;
-
-`;
 const Overlay = styled(motion.div)`
   position:fixed;
   opacity:0;
@@ -161,7 +49,7 @@ const Overlay = styled(motion.div)`
 const BigBox = styled(motion.div)`
   position: absolute;
   width: 40vw;
-  height: 80vh;
+  height: 70vh;
   background-Color: whitesmoke;
   border-radius:20px;
   left: 0;
@@ -171,17 +59,41 @@ const BigBox = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
+  padding:5px 5px 5px 5px;
 `;
 const Div = styled.div`
-  background-color: pink;
-  margin-top: -150px;
+  background-color: whitesmoke;
+  margin-top: -10px;
   margin-bottom:60px;
-  width:450px;
+  width:500px;
   height:300px;
+  :hover {
+    cursor: pointer;
+  }
+`;
+const FontBox = styled.div`
+  background-color:#c4f0fadf;
+  border-radius:30px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  //margin-top: 50px;
+  padding: 10px 10px 10px 10px;
+`;
+const Img = styled.img`
+  width:100%;
+  height:100%;
+`;
+const Title = styled.h1`
+  font-size:25px;
+  font-weight: bold;
+  color:black;
 `;
 const H1 = styled.h1`
-  font-size:25px;
+  margin-top:15px;
+  font-size:17px;
   color:black;
 `;
 function MyList(){
@@ -201,25 +113,64 @@ function MyList(){
       
   //recoil 사용 선언부!! id, start, end , review 가져옴
     const [road, setRoad] = useRecoilState(roadState);
+    const data = [
+      {"id":1, "출발":"숙명여자대학교" , "도착":"여의도 안내센터" , 
+      "후기":"자전거 길이 잘 구현되어 있어요. 길 옆에 나무들이 많아서 기분이 좋아져요! 중간에 차도와 가까워서 조금 위험한 부분도 있지만 전체적으로 자연과 가까운 코스입니다!" , 
+      "타입":"힐링코스"},
+      { "id":2, "출발":"서울 특별 시청" , "도착":"경복궁" , 
+      "후기":"사람이 많아서 길이 복잡하긴 하지만 눈호강이 엄청나요! 특히 경복궁이 너무 예쁘고 도로가 넓은 편이라 자전거 타기에도 편해요" , 
+      "타입":"힐링코스" , 
+      },
+      {"id":3, "출발":"홍익대학교" , "도착":"숙명여자대학교" , 
+      "후기":" 주변에 맛집, 먹거리가 많아서 놀기에 좋아요. 그런데 차도가 많이나와서 약간 위험한것 같아요. 그리고 유동인구가 많아 제대로 달리지 못할 때도 있어요", 
+      "타입":"무난코스",
+      },
+      {"id":4, "출발":"어린이 대공원" , "도착":"서울숲" , 
+      "후기":" 여기는 풍경이 강점이에요. 나무들이 많아서 길을 달리면서 맑은 공기를 마실 수 있어요. ", 
+      "타입":"무난코스",
+
+      },
+      {"id":5, "출발":"월드컵 경기장" , "도착":"숙명여자대학교" , 
+      "후기":" 중간에 한강을 지나갈때 풍경은 좋지만, 거의 대부분 아파트 단지 풍경이라 볼게 없어요. 그리고 3시간 정도의 코스이니 매우 힘듭니다.특히 한강 다리를 건널때 고비에요. ", 
+      "타입":"비추코스"
+
+      },
+      {"id":6,"출발":"남산타워" , "도착":"숙명여자대학교" , 
+      "후기": "20분 정도의 코스라 짧긴 하지만 경사가 높은 곳이 많아 너무 힘들어요. 특히 남산 타워에서 내려올 때 내리막길이여도 경사가 급해서 너무 위험했어요.", 
+      "타입": "비추코스"
+      },
+    ];
     const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Mypage/MyList/:itemId");
 
-    const clickedBox = bigRoadMatch?.params.itemId && road.find((item) => item.id === +bigRoadMatch.params.itemId);
-    
+    const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
+    const clickedBoxTwo = bigRoadMatch?.params.itemId && road.find((item) => item.id === +bigRoadMatch.params.itemId);
+
     const onOverlayClick = ()=> history.push("/Mypage/MyList/");
     const {scrollY} = useScroll();
+
+
     return (
        <>
         <Wrapper>
             <AnimatePresence>
               
                 <Ul>
-                  <li>{road.map((item) => (
+                  <li>{data.map((item) => (
                   <Box 
-                   layoutId={item.id +"road"}
+                   layoutId={item.id +""}
                    key={item.id}
                    onClick = {()=> onBoxClicked(item.id)}
                    >
-                   번호: {item.id} , 출발지: {item.start} , 도착지: {item.end} 
+                   [ {item.id} ]  출발지: {item.출발} , 도착지: {item.도착} 
+                  </Box>
+                ))}</li>
+                <li>{road.map((item) => (
+                  <Box 
+                   layoutId={item.id+""}
+                   key={item.id}
+                   onClick = {()=> onBoxClicked(item.id)}
+                   >
+                   [{item.id} ] | 출발지: {item.start}  ,  도착지: {item.end} 
                   </Box>
                 ))}</li>
                 </Ul>
@@ -236,14 +187,36 @@ function MyList(){
                 animate = {{opacity: 1}}
               />
               <BigBox
-                layoutId={bigRoadMatch.params.itemId+"road"}
+                layoutId={bigRoadMatch.params.itemId+""}
                 style = {{top:scrollY.get() + 100, }}
               >
+              
               {
-                clickedBox && 
+                clickedBoxOne && 
                 (<>
-                <Div ></Div>
-                <H1 > 후기 : {clickedBox.review}</H1>
+                <Div >
+                  <Img
+                  src={require(`../images/${clickedBoxOne.id}.png`)}
+                />
+                </Div>
+                <FontBox>
+                  <Title > 후기 </Title>
+                  <H1>{clickedBoxOne.후기}</H1>
+                </FontBox>
+                </>)
+              }
+              {
+                clickedBoxTwo && 
+                (<>
+                <Div >
+                <Img
+                  src={require(`../images/${clickedBoxTwo.id}.png`)}
+                />
+                </Div>
+                <FontBox>
+                   <Title>후기</Title>
+                  <H1> {clickedBoxTwo.review} </H1>
+                </FontBox>
                 </>)
               }
               </BigBox>

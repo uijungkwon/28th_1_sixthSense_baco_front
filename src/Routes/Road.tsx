@@ -55,8 +55,8 @@ const Title = styled.h1`
 
 const MapBox = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
-  width: 500px;
-  height: 450px;
+  width: 600px;
+  height: 500px;
   margin-right:100px;
   margin-left:100px;
   margin-top:40px;
@@ -171,14 +171,20 @@ declare global {
     kakao: any;
   }
 }
+const Img = styled.img`
+  width:600px;
+  height:500px;
+  border-radius:30px;
+`;
 function Road() {
   //1) map 보여주기
-  const kakaoAPI = window.kakao.maps;
+  
   const [map, setMap] = useState<any>();
   const [marker, setMarker] = useState<any>();
   const [state, setState] = useState()
 
-  //카카오 맵 
+  /*
+  const kakaoAPI = window.kakao.maps;
   const options = { //지도를 생성할 때 필요한 기본 옵션
     center: new kakaoAPI.LatLng( 37.54365822551167,  126.97226557852383), //지도의 중심좌표.
     level: 4 //지도의 레벨(확대, 축소 정도)
@@ -190,7 +196,8 @@ function Road() {
     //const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     setMap(new kakaoAPI.Map(container.current, options));
   }, []);
-  
+  */
+
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
@@ -201,14 +208,17 @@ function Road() {
   });
   const history = useHistory();
   const [road, setRoad] = useRecoilState(roadState);
-  const [count,setCount]  = useState(1);
-
+  const [count,setCount]  = useState(7);
+  const [photo,setPhoto] = useState(false);
+  const onclick = () => {
+    setPhoto((prev) =>! prev);
+  };
   const onValid = ({start,end, review}: IForm) => {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
     
     setRoad((oldRoad) => {
-     setCount((count) => count+1);
-     console.log(count);
+     //setCount((count) => count+1);
+     //console.log(count);
      return  [...oldRoad,{id:count, start:start, end:end, review:review}]
     });
     setValue("start", "");
@@ -225,11 +235,16 @@ function Road() {
           <Board>
           <CreateForm>
             <MapBox 
-            id="map" 
-            ref = {container} 
+            //id="map" 
+            //ref = {container} 
             >
+              { photo ? (
+              <Img
+                  src={require(`../images/7.png`)}
+                />
+            ):null
+            }
             </MapBox>
-            <Button >경로 보기</Button>
           </CreateForm>
             <CreateForm onSubmit={handleSubmit(onValid)} >
             <RoadBox>
@@ -265,7 +280,7 @@ function Road() {
                   })}
                 />
               </RoadBox>
-              <Button > 후기 저장</Button>
+              <Button onClick ={onclick}> 후기 저장</Button>
             </CreateForm>   
 
 
