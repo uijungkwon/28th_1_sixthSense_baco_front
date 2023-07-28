@@ -239,8 +239,8 @@ function Road() {
             >
               { photo ? (
               <Img
-                  src={road_11}
-                />
+              src={require(`../images/11.png`)}
+            />
             ):null
             }
             </MapBox>
