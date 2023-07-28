@@ -225,7 +225,7 @@ function Road() {
     setValue("review", "");
     console.log(road);
   };
- 
+  const road_11 = require("../images/11.png");
   return (
     <>
       <Wrapper>
@@ -239,7 +239,7 @@ function Road() {
             >
               { photo ? (
               <Img
-                  src={require(`../images/11.png`).default}
+                  src={road_11}
                 />
             ):null
             }
