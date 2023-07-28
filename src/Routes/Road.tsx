@@ -239,7 +239,7 @@ function Road() {
             >
               { photo ? (
               <Img
-                  src={require(`../images/11.png`)}
+                  src={require(`../images/11.png`).default}
                 />
             ):null
             }

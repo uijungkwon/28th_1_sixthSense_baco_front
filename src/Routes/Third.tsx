@@ -185,7 +185,7 @@ function Third(){
                 (<>
                 <Div >
                   <Img
-                  src={require(`../images/${clickedBoxOne.id}.png`)}
+                  src={require(`../images/${clickedBoxOne.id}.png`).default}
                 />
                 </Div>
                 <ReviewBox>
