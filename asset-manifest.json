@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.js": "/solux/static/js/main.6fbf6fe4.js",
-    "static/media/2.png": "/solux/static/media/2.ce5f1018728db7905949.png",
-    "static/media/3.png": "/solux/static/media/3.bf50a100be4d96147958.png",
-    "static/media/1.png": "/solux/static/media/1.6bcd3eeb8e1fd9346330.png",
-    "static/media/4.png": "/solux/static/media/4.ec87e32cb26cf79e4309.png",
-    "static/media/5.png": "/solux/static/media/5.aa23c26dfc72e7a5b10e.png",
-    "static/media/BMJUA_ttf.ttf": "/solux/static/media/BMJUA_ttf.bf12d2d886260d73277b.ttf",
-    "static/media/6.png": "/solux/static/media/6.8088b57b3c1902f84ad8.png",
-    "static/media/10.png": "/solux/static/media/10.ff095ea763ed4715f199.png",
-    "static/media/8.png": "/solux/static/media/8.08f54185347afc22aca2.png",
-    "static/media/9.png": "/solux/static/media/9.e662b13c599b708f7362.png",
-    "static/media/11.png": "/solux/static/media/11.d3c817b584eb5218c702.png",
-    "static/media/7.png": "/solux/static/media/7.e0c7abdd920cf024aaa3.png",
-    "static/media/BMHANNAAir_ttf.ttf": "/solux/static/media/BMHANNAAir_ttf.d0c38d74f11fd837be79.ttf",
-    "static/media/roadBg.png": "/solux/static/media/roadBg.cd04d5ec17ed1a2532c7.png",
-    "static/media/homeBgPhoto.png": "/solux/static/media/homeBgPhoto.f07ec871d45e23b5f48e.png",
-    "static/media/allBg.png": "/solux/static/media/allBg.20b1f3f966f3d22e7364.png",
-    "static/media/bike.png": "/solux/static/media/bike.bbb21bd2ea116a803fae.png",
-    "index.html": "/solux/index.html",
-    "main.6fbf6fe4.js.map": "/solux/static/js/main.6fbf6fe4.js.map"
+    "main.js": "/28th_1_sixthSense_baco_front/static/js/main.5e0dd8f5.js",
+    "static/media/2.png": "/28th_1_sixthSense_baco_front/static/media/2.ce5f1018728db7905949.png",
+    "static/media/3.png": "/28th_1_sixthSense_baco_front/static/media/3.bf50a100be4d96147958.png",
+    "static/media/1.png": "/28th_1_sixthSense_baco_front/static/media/1.6bcd3eeb8e1fd9346330.png",
+    "static/media/4.png": "/28th_1_sixthSense_baco_front/static/media/4.ec87e32cb26cf79e4309.png",
+    "static/media/5.png": "/28th_1_sixthSense_baco_front/static/media/5.aa23c26dfc72e7a5b10e.png",
+    "static/media/BMJUA_ttf.ttf": "/28th_1_sixthSense_baco_front/static/media/BMJUA_ttf.bf12d2d886260d73277b.ttf",
+    "static/media/6.png": "/28th_1_sixthSense_baco_front/static/media/6.8088b57b3c1902f84ad8.png",
+    "static/media/10.png": "/28th_1_sixthSense_baco_front/static/media/10.ff095ea763ed4715f199.png",
+    "static/media/8.png": "/28th_1_sixthSense_baco_front/static/media/8.08f54185347afc22aca2.png",
+    "static/media/9.png": "/28th_1_sixthSense_baco_front/static/media/9.e662b13c599b708f7362.png",
+    "static/media/11.png": "/28th_1_sixthSense_baco_front/static/media/11.d3c817b584eb5218c702.png",
+    "static/media/7.png": "/28th_1_sixthSense_baco_front/static/media/7.e0c7abdd920cf024aaa3.png",
+    "static/media/BMHANNAAir_ttf.ttf": "/28th_1_sixthSense_baco_front/static/media/BMHANNAAir_ttf.d0c38d74f11fd837be79.ttf",
+    "static/media/roadBg.png": "/28th_1_sixthSense_baco_front/static/media/roadBg.cd04d5ec17ed1a2532c7.png",
+    "static/media/homeBgPhoto.png": "/28th_1_sixthSense_baco_front/static/media/homeBgPhoto.f07ec871d45e23b5f48e.png",
+    "static/media/allBg.png": "/28th_1_sixthSense_baco_front/static/media/allBg.20b1f3f966f3d22e7364.png",
+    "static/media/bike.png": "/28th_1_sixthSense_baco_front/static/media/bike.bbb21bd2ea116a803fae.png",
+    "index.html": "/28th_1_sixthSense_baco_front/index.html",
+    "main.5e0dd8f5.js.map": "/28th_1_sixthSense_baco_front/static/js/main.5e0dd8f5.js.map"
   },
   "entrypoints": [
-    "static/js/main.6fbf6fe4.js"
+    "static/js/main.5e0dd8f5.js"
   ]
 }
