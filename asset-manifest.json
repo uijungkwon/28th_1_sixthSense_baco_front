@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/28th_1_sixthSense_baco_front/static/js/main.5e0dd8f5.js",
+    "main.js": "/28th_1_sixthSense_baco_front/static/js/main.6c31399e.js",
     "static/media/2.png": "/28th_1_sixthSense_baco_front/static/media/2.ce5f1018728db7905949.png",
     "static/media/3.png": "/28th_1_sixthSense_baco_front/static/media/3.bf50a100be4d96147958.png",
     "static/media/1.png": "/28th_1_sixthSense_baco_front/static/media/1.6bcd3eeb8e1fd9346330.png",
@@ -19,9 +19,9 @@
     "static/media/allBg.png": "/28th_1_sixthSense_baco_front/static/media/allBg.20b1f3f966f3d22e7364.png",
     "static/media/bike.png": "/28th_1_sixthSense_baco_front/static/media/bike.bbb21bd2ea116a803fae.png",
     "index.html": "/28th_1_sixthSense_baco_front/index.html",
-    "main.5e0dd8f5.js.map": "/28th_1_sixthSense_baco_front/static/js/main.5e0dd8f5.js.map"
+    "main.6c31399e.js.map": "/28th_1_sixthSense_baco_front/static/js/main.6c31399e.js.map"
   },
   "entrypoints": [
-    "static/js/main.5e0dd8f5.js"
+    "static/js/main.6c31399e.js"
   ]
 }
