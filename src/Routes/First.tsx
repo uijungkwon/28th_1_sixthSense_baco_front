@@ -1,6 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence,useScroll } from "framer-motion";
 import { styled } from "styled-components";
-
+import { useEffect,useRef, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isnameAtom } from "../atoms";
 const Container = styled.div`
   height: 100vh;
   padding: 0px 20px;
@@ -22,43 +25,185 @@ const Box = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  h2{
-    text-align:left;
+
+`;
+const FontBox = styled.div`
+  width:1000px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: flex-start;
+  //background-color: #f800c2d2;
+  text-align: center;
+  border-radius: 10px;
+  //margin-right: ;
+
+`;
+const Font = styled.span`
+  width: 160px;
+  font-size: 18px;
+  font-weight: 400;
+
+  margin-left:70px;
+
+  //background-color: #fabbefd2;
+  color: black;
+  a {
+    display: block;
+  }
+  padding: 15px;
+  border-radius: 10px;
+`;
+const Overlay = styled(motion.div)`
+  position:fixed;
+  opacity:0;
+  top:0;
+  margin-left:-230px;
+  width:100%;
+  height:100%;
+  background-color: rgba(0,0,0,0.5);
+`;
+const BigBox = styled(motion.div)`
+  position: absolute;
+  width: 40vw;
+  height: 70vh;
+  background-Color: whitesmoke;
+  border-radius:20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding:5px 5px 5px 5px;
+`;
+const Div = styled.div`
+  background-color: whitesmoke;
+  margin-top: -10px;
+  margin-bottom:60px;
+  width:500px;
+  height:300px;
+  :hover {
+    cursor: pointer;
   }
 `;
-
-const Ul = styled.ul`
-    color:black;
+const ReviewBox = styled.div`
+  background-color:#c4f0fadf;
+  border-radius:30px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  //margin-top: 50px;
+  padding: 10px 10px 10px 10px;
 `;
-
+const Img = styled.img`
+  width:100%;
+  height:100%;
+`;
+const Title = styled.h1`
+  font-size:25px;
+  font-weight: bold;
+  color:black;
+`;
+const H1 = styled.h1`
+  margin-top:15px;
+  font-size:17px;
+  color:black;
+`;
 function First(){
+    const name = useRecoilValue(isnameAtom);
     const data = [
-    {"id":1, "출발":"숙명여자대학교" , "도착":"여의도 안내센터" , 
-    "후기":"자전거 길이 잘 구현되어 있어요. 길 옆에 나무들이 많아서 기분이 좋아져요! 중간에 차도와 가까워서 조금 위험한 부분도 있지만 전체적으로 자연과 가까운 코스입니다!" , 
-    "작성일":"2023.07.14"},
-    { "id":2, "출발":"서울 특별 시청" , "도착":"경복궁" , 
-    "후기":"사람이 많아서 길이 복잡하긴 하지만 눈호강이 엄청나요! 특히 경복궁이 너무 예쁘고 도로가 넓은 편이라 자전거 타기에도 편해요" , 
-    "작성일":"2023.07.20" , 
-    },
-    ];
+        {"id":1, "name":`${name}`, "출발":"숙명여자대학교" , "도착":"여의도 안내센터" , 
+        "후기":"자전거 길이 잘 구현되어 있어요. 길 옆에 나무들이 많아서 기분이 좋아져요! 중간에 차도와 가까워서 조금 위험한 부분도 있지만 전체적으로 자연과 가까운 코스입니다!" , 
+        "작성일":"2023.07.14"},
+        { "id":2,"name":`${name}`, "출발":"서울 특별 시청" , "도착":"경복궁" , 
+        "후기":"사람이 많아서 길이 복잡하긴 하지만 눈호강이 엄청나요! 특히 경복궁이 너무 예쁘고 도로가 넓은 편이라 자전거 타기에도 편해요" , 
+        "작성일":"2023.07.20" , 
+        },
+        
+        {
+            "id":7,"name":"솔방울", "출발":"서울역 6번 출구" , "도착":"서촌 마을" , 
+            "후기":"숭례문으로 시작해 덕수궁, 시청, 광하문과 경복궁까지 서울의 명소를 지나서 너무 좋아요. 자전거 전용 도로가 있어서 맘편히 달릴수 있어서 더 좋아요!" , 
+            "작성일":"2023.07.28" ,  
+        },
+        {
+            "id":11,"name":`${name}`, "출발":"키에리" , "도착":"숙명여대" , 
+            "후기":"주변이 산뷰라서 눈이 정화되는 느낌이에요. 짧은코스라서 힘들지 않고 가는길에 맛집이 많이 있어서 놀거리도 많아요!" , 
+            "작성일":"2023.08.09" ,  
+        },
+    
+        ];
+    const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Review/First/:itemId");
+    const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
+    const history = useHistory();
+    const onOverlayClick = ()=> history.push("/Review/First/");
+    const {scrollY} = useScroll();
+    const onBoxClicked = (itemId: number)=>{
+        history.push(`/Review/First/${itemId}`);
+      }
+
     return (
         <>
             <Container >
-                <ul>
+            <AnimatePresence>
+            <ul>
                     <li>{data.map((item) => (
                     <Box 
                     layoutId={item.id +""}
                     key={item.id}
-                    //onClick = {()=> onBoxClicked(item.id)}
+                    onClick = {()=> onBoxClicked(item.id)}
                     >
-                    <h2 style={{ paddingRight:200}}>[{item.id}] 익명</h2>  <h2 style={{ paddingRight:200}} > {item.출발}~{item.도착}</h2> <h2>{item.작성일}</h2>     
+                     <FontBox>
+                            <Font>[{item.id}] {item.name}</Font>
+                            <Font> {item.출발}~{item.도착}</Font>
+                            <Font>{item.작성일}</Font>    
+                        </FontBox>
                     </Box>
                     ))}</li>
                 </ul>
+                </AnimatePresence>
+
+                <AnimatePresence>
+            
+            {bigRoadMatch ? (
+              <>
+              <Overlay 
+                onClick = {onOverlayClick}
+                exit = {{opacity:0}}
+                animate = {{opacity: 1}}
+              />
+              <BigBox
+                layoutId={bigRoadMatch.params.itemId+""}
+                style = {{top:scrollY.get() + 100, }}
+              >
+              
+              {
+                clickedBoxOne && 
+                (<>
+                <Div >
+                  <Img
+                  src={require(`../images/${clickedBoxOne.id}.png`)}
+                />
+                </Div>
+                <ReviewBox>
+                  <Title > 후기 </Title>
+                  <H1>{clickedBoxOne.후기}</H1>
+                </ReviewBox>
+                </>)
+               }
+              </BigBox>
+            </>
+            ) : null}
+            
+          </AnimatePresence>
+
+
+
             </Container>
         </>
-        //style={{ paddingRight:50}}
-
+        
     );
 
 }

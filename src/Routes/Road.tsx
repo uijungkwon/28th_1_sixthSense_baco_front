@@ -15,7 +15,6 @@ import { useHistory } from "react-router-dom";
 import { contentState } from "./atoms";
 import { roadState } from "../atoms";
 
-
 const kakao = window;
 const roadBg = require("../images/roadBg.png");
 
@@ -208,7 +207,7 @@ function Road() {
   });
   const history = useHistory();
   const [road, setRoad] = useRecoilState(roadState);
-  const [count,setCount]  = useState(7);
+  const [count,setCount]  = useState(11);
   const [photo,setPhoto] = useState(false);
   const onclick = () => {
     setPhoto((prev) =>! prev);
@@ -240,7 +239,7 @@ function Road() {
             >
               { photo ? (
               <Img
-                  src={require(`../images/7.png`)}
+                  src={require(`../images/11.png`)}
                 />
             ):null
             }

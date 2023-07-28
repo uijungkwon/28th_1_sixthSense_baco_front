@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+import { isnameAtom } from '../atoms';
+import { useRecoilState } from 'recoil';
 
 const Wrapper = styled(motion.div)`
   //height: 110vh;
@@ -82,20 +84,25 @@ const Span = styled.span`
   color:red;
 `;
 interface IForm { //start 값의 타입
+  name:string;
   password: string;
   passwordConfirm: string;
 }
 
 function Update() {
+  const [nameValue,setNameValue] = useRecoilState(isnameAtom);
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
+      name:"",
       password:"",
       passwordConfirm:""
     },
   });
-  const onValid = ({password,passwordConfirm}: IForm) => {
+  const onValid = ({name, password,passwordConfirm}: IForm) => {
     //console.log(name,"and", password,"and", passwordConfirm);
+    setNameValue((nameValue) => name);
+    console.log(nameValue);
     history.push('/');
   };
   const history = useHistory();
@@ -105,6 +112,17 @@ function Update() {
     <Wrapper>
       <Box >
         <CreateForm onSubmit={handleSubmit(onValid)} >
+        <P>
+                <Label style={{ paddingRight:50}}>닉네임 </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="변경할 닉네임을 입력하세요"
+                  {...register("name", {
+                    required: "변경할 닉네임을 입력하세요",
+              })}
+            />
+            </P>
               <P>
                 <Label style={{ paddingRight:35}}>비밀번호 </Label>
                 <Input

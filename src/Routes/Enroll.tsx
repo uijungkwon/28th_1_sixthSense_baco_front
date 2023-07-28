@@ -7,12 +7,15 @@ interface FormValue {
   email: string;
   password: string;
   passwordConfirm: string;
+  nickname: string;
 }
 const Header = styled.header`
   height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 const Title = styled.h1`
   font-size: 40px;
@@ -31,7 +34,7 @@ const Wrapper = styled.div`
 const Box = styled.div`
   background: rgba(255, 255, 255, 0.5);
   width: 700px;
-  height: 400px;
+  height: 450px;
   border-radius: 30px;
   box-shadow: 0px 2px 4px black;
   color: black;
@@ -54,7 +57,7 @@ const Container = styled.form`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-left:-100px;
+  margin-top: 10px; margin-left:-100px;
 	background-color: ${(props) => props.theme.cardColor};
   flex-direction: column;
 `;
@@ -91,6 +94,7 @@ const P = styled.p`
 		justify-content: center;
 		color: ${(props) => props.theme.textColor};
     flex-direction: column;
+    
 `;
 
 const Label = styled.label`
@@ -102,6 +106,20 @@ const Span = styled.span`
   margin-top:-10px;
   color:red;
 `;
+
+const NicknameInput = styled.input`
+  width: 200px;
+  border: 1;
+  border-radius: 10px;
+  background-color: white;
+  padding: 8px 15px;
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme.textColor};
+  margin-bottom: 20px;
+`;
+
 function Enroll() {
   const {
     register,
@@ -128,7 +146,7 @@ function Enroll() {
             <Input
               id="email"
               type="text"
-              placeholder="test@gmail.com"
+              placeholder="test@email.com"
               aria-invalid={!isDirty ? undefined : errors.email ? "true" : "false"}
               {...register("email", {
                 required: "        이메일은 필수 입력입니다.",
@@ -137,10 +155,21 @@ function Enroll() {
                   message: "        이메일 형식에 맞지 않습니다.",
                 },
               })}
-            />
-            
+            />  
           </P>
           {errors.email && <Span>{errors.email?.message}</Span>}
+          <P>
+            <Label htmlFor="nickname" style={{ paddingRight:50}}>닉네임</Label>
+            <Input
+              id="nickname"
+              type="text"
+              placeholder="닉네임"
+              {...register("nickname", {
+                required: "        닉네임은 필수 입력입니다.",
+              })}
+            />
+          </P>
+          {errors?.nickname && <Span>{errors.nickname.message}</Span>}
           <P>
             <Label htmlFor="password" style={{ paddingRight:35}}>비밀번호</Label>
             <Input
