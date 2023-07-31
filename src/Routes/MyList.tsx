@@ -5,6 +5,8 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { contentState } from "./atoms";
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { roadState } from "../atoms";
+import { useQuery } from "react-query";
+import { fetchCoins, fetchRoads } from "../api";
 
 const Wrapper = styled(motion.div)`
   display: flex;
@@ -96,8 +98,43 @@ const H1 = styled.h1`
   font-size:17px;
   color:black;
 `;
+const iframePart = () => {
+  return {
+    __html:
+      '<iframe src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapTest"  width="400px" height="100%" style="border: none;"></iframe>'
+  };
+};
+interface ICoin {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+}
+interface IRoad {
+  content: string;
+  mapUrl: string;
+}
+
+function fetchItems() {
+  return fetch("https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/detail/1")
+  .then((response) =>
+    response.json()
+  );
+}
+
 function MyList(){
-      //2) 모달 박스 띄우기 위해 해당 버튼을 눌렀는지 확인하는 코드
+      //1)데이터 가져오기
+
+      const { isLoading, data:Coindata } = useQuery<ICoin[]>("allCoins", fetchCoins);
+      //const {  data:RoadData } = useQuery<IRoad>("Road", fetchItems);
+      //console.log(RoadData);
+      //const testName = Coindata?.slice(0,1).map((coin) => coin.id);
+      //console.log(testName);
+
+      
       const [isOpen, setIsOpen] = useState(false);
       const openModalHandler = () => {
         console.log()
@@ -109,7 +146,7 @@ function MyList(){
     //1-1) 하나의 박스(저장 경로) 를 선택했을 때 나타나는 동작 설정  
     const onBoxClicked = (itemId: number)=>{
       history.push(`/Mypage/MyList/${itemId}`);
-    }
+    };
       
   //recoil 사용 선언부!! id, start, end , review 가져옴
     const [road, setRoad] = useRecoilState(roadState);
@@ -140,6 +177,10 @@ function MyList(){
       "타입": "비추코스"
       },
     ];
+
+    
+
+
     const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Mypage/MyList/:itemId");
 
     const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
@@ -194,11 +235,9 @@ function MyList(){
               {
                 clickedBoxOne && 
                 (<>
-                <Div >
-                  <Img
-                  src={require(`../images/${clickedBoxOne.id}.png`)}
-                />
-                </Div>
+                <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                <iframe title="Naver Map" src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+                </div>
                 <FontBox>
                   <Title > 후기 </Title>
                   <H1>{clickedBoxOne.후기}</H1>
@@ -208,11 +247,9 @@ function MyList(){
               {
                 clickedBoxTwo && 
                 (<>
-                <Div >
-                <Img
-                  src={require(`../images/${clickedBoxTwo.id}.png`)}
-                />
-                </Div>
+                <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                <iframe title="Naver Map" src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+                </div>
                 <FontBox>
                    <Title>후기</Title>
                   <H1> {clickedBoxTwo.review} </H1>
@@ -229,3 +266,8 @@ function MyList(){
     );
 }
 export default MyList;
+/*
+<Img
+                  src={require(`../images/${clickedBoxOne.id}.png`)}
+                />
+*/

@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { isnameAtom } from '../atoms';
 import { useRecoilState } from 'recoil';
+import axios from 'axios';
 
 const Wrapper = styled(motion.div)`
   //height: 110vh;
@@ -100,10 +101,29 @@ function Update() {
     },
   });
   const onValid = ({name, password,passwordConfirm}: IForm) => {
-    //console.log(name,"and", password,"and", passwordConfirm);
-    setNameValue((nameValue) => name);
-    console.log(nameValue);
-    history.push('/');
+    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/change-password',
+    {
+      newPassword:password,
+      newPasswordConfirm:passwordConfirm,
+      newNickname:name,
+    },
+    {
+      headers: {
+        //'Content-Type': 'application/json',
+        //"Access-Control-Allow-Origin" : "*",
+
+      }
+    })
+    .then((response) => {
+      window.alert('회원 정보 수정이 완료되었습니다.')
+      console.log(response);
+      history.push('/Mypage');
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      window.alert(error);
+    })
+    
   };
   const history = useHistory();
 

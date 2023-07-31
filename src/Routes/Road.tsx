@@ -14,6 +14,7 @@ import { Map } from "react-kakao-maps-sdk";
 import { useHistory } from "react-router-dom";
 import { contentState } from "./atoms";
 import { roadState } from "../atoms";
+import axios from "axios";
 
 const kakao = window;
 const roadBg = require("../images/roadBg.png");
@@ -196,6 +197,15 @@ function Road() {
     setMap(new kakaoAPI.Map(container.current, options));
   }, []);
   */
+// API URL
+
+// requestBody
+const requestBody = {
+  startPlace: '출발지 장소명',
+  endPlace: '도착지 장소명',
+  content: '후기 텍스트 내용'
+};
+
 
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
@@ -207,19 +217,38 @@ function Road() {
   });
   const history = useHistory();
   const [road, setRoad] = useRecoilState(roadState);
-  const [count,setCount]  = useState(11);
+  const [count,setCount]  = useState(7);
   const [photo,setPhoto] = useState(false);
   const onclick = () => {
     setPhoto((prev) =>! prev);
   };
+  
+  const [data, setData] = useState(null);
   const onValid = ({start,end, review}: IForm) => {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
     
     setRoad((oldRoad) => {
-     //setCount((count) => count+1);
-     //console.log(count);
+     setCount((count) => count+1);
+     console.log(count);
      return  [...oldRoad,{id:count, start:start, end:end, review:review}]
     });
+
+    axios.get('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', {
+      params: {
+        startPlace:start,
+        endPlace:end,
+        content:review,
+      }
+    })
+    .then((response) => {
+      //console.log(response.data);
+    }).catch(function (error) {
+      //오류 발생 시 실행될 문장
+    }).then(function() {
+        // 항상 실행
+    });
+
+
     setValue("start", "");
     setValue("end", "");
     setValue("review", "");

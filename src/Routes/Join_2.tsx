@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useCallback } from 'react';
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -120,7 +121,7 @@ const NicknameInput = styled.input`
   margin-bottom: 20px;
 `;
 
-function Enroll() {
+function Join_2() {
   const {
     register,
     handleSubmit,
@@ -129,9 +130,30 @@ function Enroll() {
   } = useForm<FormValue>();
 
   const history = useHistory();
-  const onSubmit = (data: FormValue) => {
-    console.log(data);
-    history.push('/Login');
+
+  const onSubmit = ({email,password,passwordConfirm,nickname}: FormValue) => {
+    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/join',
+          {
+            email: email ,
+            password :password ,
+            password2 :passwordConfirm,
+            nickname: nickname,
+          },
+          {
+            headers: {
+              //'Content-Type': 'application/json',
+              //"Access-Control-Allow-Origin" : "*",
+
+            }
+          })
+          .then((response) => {
+            window.alert('회원가입 되었습니다. 로그인해주세요.')
+            history.push('/Login')
+          }).catch((error) => {
+            console.log("서버와 연결되지 않습니다");
+            window.alert(error);
+          })
+
   };
 
   return (
@@ -232,4 +254,4 @@ function Enroll() {
   );
 }
 
-export default Enroll;
+export default Join_2;

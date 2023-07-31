@@ -3,11 +3,9 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import {  isEmailAtom, isLoginAtom } from "../atoms";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 
-type FormData = {
-  email: string;
-  password: string;
-};
+
 const Header = styled.header`
   height: 10vh;
   display: flex;
@@ -101,6 +99,11 @@ const Span = styled.span`
   margin-top:-20px;
   color:red;
 `;
+
+interface FormData  {
+  email: string;
+  password: string;
+};
 function Login() {
 
   const {
@@ -109,14 +112,54 @@ function Login() {
     formState: { isSubmitting, isDirty, errors },
   } = useForm<FormData>(); // Specify the generic type here
  const history = useHistory();
- const [state,setState] = useRecoilState(isLoginAtom);
- const [mail,setEmail] = useRecoilState(isEmailAtom);
+ const [member,setMember] = useRecoilState(isLoginAtom);
 
-   const onSubmit = (data: FormData) => {
-    //console.log(data);
-    setState((prev) => !(prev) );
-    setEmail((mail) => data.email);
-    history.push('/');
+   const onSubmit = ({email,password}: FormData) => {
+    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/login',
+    {
+      email: email ,
+      password :password,
+    },
+    {
+      headers: {
+        //'Content-Type': 'application/json',
+        //"Access-Control-Allow-Origin" : "*",
+
+      }
+    })
+    .then((response) => {
+      window.alert('로그인 완료되었습니다.')
+      setMember((member=> response?.data?.member_id));
+      console.log(response?.data?.member_id);
+      history.push('/')
+    })
+    .catch((error) => {
+      //console.log(error.response.data);
+      window.alert(error);
+    })
+/*
+axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/join',
+          {
+            eamil: email ,
+            password :password ,
+            password2 :passwordConfirm,
+            nickname: nickname,
+          },
+          {
+            headers: {
+              //'Content-Type': 'application/json',
+              //"Access-Control-Allow-Origin" : "*",
+
+            }
+          })
+          .then((response) => {
+            window.alert('회원가입 되었습니다. 로그인해주세요.')
+            history.push('/Login')
+          }).catch((error) => {
+            console.log("서버와 연결되지 않습니다");
+            window.alert(error);
+          })
+*/
   }; 
   
   

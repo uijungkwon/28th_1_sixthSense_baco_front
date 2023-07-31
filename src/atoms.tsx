@@ -21,7 +21,7 @@ export const roadState = atom<IRoad[]>({
 
 export const isLoginAtom = atom({ //하나의 원소만 recoil로 생성할 때!
     key: 'isLogin',
-    default: false,
+    default: 0,
   });
 export const isEmailAtom = atom({
     key: 'isEmail',

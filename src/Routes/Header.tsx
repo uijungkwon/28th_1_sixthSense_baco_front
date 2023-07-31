@@ -59,6 +59,7 @@ const LogoItems = styled.ul`
   const Items = styled.ul`
     display: flex;
     align-items: center;
+    margin-left:100px;
     font-family: "Hanna"; 
     color: ${(props) => props.theme.white.darker};
     transition: color 0.3 ease-in-out;
@@ -67,7 +68,7 @@ const LogoItems = styled.ul`
     }
   `;
   const Item = styled.li`
-    margin-right: 50px;
+    margin-right: 100px;
     display: flex;
     position: relative;
     justify-content: center;
@@ -79,7 +80,7 @@ const LogoItems = styled.ul`
 
 // 3) 회원가입/로그인 화면
   const LogItems = styled.ul`
-  margin-left: 250px;
+  margin-left: 80px;
   display: flex;
   align-items: center;
   font-size:12px;
@@ -135,7 +136,7 @@ const LogoItems = styled.ul`
       }
     });
 
-    const state = useRecoilValue(isLoginAtom);
+    const member = useRecoilValue(isLoginAtom);
     const email = useRecoilValue(isEmailAtom);
 
     return (
@@ -162,26 +163,29 @@ const LogoItems = styled.ul`
                 후기 작성  {roadMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
-            <Item>
-              <Link to="/Mypage">
-                마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
-              </Link>
-            </Item>
+            
             <Item>
               <Link to="/Review">
                 후기 공유 게시판 {reviewMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
+            <Item>
+              {member !== 0 ?(<Link to="/Mypage">
+                마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
+              </Link>) : null
+              }
+              
+            </Item>
             </Items>
             <LogItems>
-            { state ?(
-              <LogItem style = {{marginLeft:"-20px"}}>
-               {email}님
+            { member !== 0 ?(
+              <LogItem style = {{marginLeft:"100px"}}>
+               {member}님 !
              </LogItem>
             ) :(
               <>
               <LogItem>
-               <Link to="/Enroll">
+               <Link to="/Join_2">
                  회원 가입 {enrollMatch ? <Circle layoutId="circle" /> : null}
                </Link>
              </LogItem>
