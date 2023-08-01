@@ -7,6 +7,7 @@ import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { roadState } from "../atoms";
 import { useQuery } from "react-query";
 import { fetchCoins, fetchRoads } from "../api";
+import axios from "axios";
 
 const Wrapper = styled(motion.div)`
   display: flex;
@@ -98,39 +99,23 @@ const H1 = styled.h1`
   font-size:17px;
   color:black;
 `;
-const iframePart = () => {
-  return {
-    __html:
-      '<iframe src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapTest"  width="400px" height="100%" style="border: none;"></iframe>'
-  };
-};
-interface ICoin {
-  id: string;
-  name: string;
-  symbol: string;
-  rank: number;
-  is_new: boolean;
-  is_active: boolean;
-  type: string;
-}
+
 interface IRoad {
   content: string;
-  mapUrl: string;
+  mapUrl: string; //review_id 필요?
 }
-
 function fetchItems() {
-  return fetch("https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/detail/1")
+  return fetch("https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/My-reviews")
   .then((response) =>
-    response.json()
+    response.json() //후기 목록 전체 가져오기
   );
 }
 
 function MyList(){
       //1)데이터 가져오기
+      const {  isLoading, data:RoadData } = useQuery<IRoad>("Road", fetchItems);
 
-      const { isLoading, data:Coindata } = useQuery<ICoin[]>("allCoins", fetchCoins);
-      //const {  data:RoadData } = useQuery<IRoad>("Road", fetchItems);
-      //console.log(RoadData);
+      console.log(RoadData);
       //const testName = Coindata?.slice(0,1).map((coin) => coin.id);
       //console.log(testName);
 
@@ -150,6 +135,9 @@ function MyList(){
       
   //recoil 사용 선언부!! id, start, end , review 가져옴
     const [road, setRoad] = useRecoilState(roadState);
+    //예비 데이터 구현
+    //예비 데이터 안에 있는 id랑 매칭 시키고 있음 
+    const [reviewData, setReviewData] = useState({});
     const data = [
       {"id":1, "출발":"숙명여자대학교" , "도착":"여의도 안내센터" , 
       "후기":"자전거 길이 잘 구현되어 있어요. 길 옆에 나무들이 많아서 기분이 좋아져요! 중간에 차도와 가까워서 조금 위험한 부분도 있지만 전체적으로 자연과 가까운 코스입니다!" , 
@@ -178,13 +166,28 @@ function MyList(){
       },
     ];
 
-    
-
-
+    //나의 후기 페이지에 들어왔을때, 백에서 목록을 한번에 받아옴
+    /*
+    useEffect(() => {//userID가 필요없다고 하여, 정보 전송 없이 GET 만함
+      axios.get('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/My-reviews')
+    .then((response) => {//응답으로 해당 장소 "mapURL" 받아오기
+     console.log(response);
+    })
+    .catch(function (error) {
+      //오류 발생 시 실행될 문장
+      console.log(error);
+      console.log("서버에서 나의 후기목록을 불러오는데 실패했습니다.");
+    })
+    .then(function() {
+        // 항상 실행
+    });
+    }, []);
+*/
     const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Mypage/MyList/:itemId");
 
     const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
     const clickedBoxTwo = bigRoadMatch?.params.itemId && road.find((item) => item.id === +bigRoadMatch.params.itemId);
+    //백이랑 연결하면 data => RoadData로 변경하면됨
 
     const onOverlayClick = ()=> history.push("/Mypage/MyList/");
     const {scrollY} = useScroll();

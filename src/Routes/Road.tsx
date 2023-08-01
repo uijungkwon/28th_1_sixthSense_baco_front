@@ -15,8 +15,6 @@ import { useHistory } from "react-router-dom";
 import { contentState } from "./atoms";
 import { roadState } from "../atoms";
 import axios from "axios";
-
-const kakao = window;
 const roadBg = require("../images/roadBg.png");
 
 const Wrapper = styled(motion.div)`
@@ -56,7 +54,7 @@ const Title = styled.h1`
 const MapBox = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
   width: 600px;
-  height: 500px;
+  height: 420px;
   margin-right:100px;
   margin-left:100px;
   margin-top:40px;
@@ -165,47 +163,16 @@ interface IForm { //recoil로 만들어서 변수 사용할 수 있도록 만들
   end: string;
   review:string;
 }
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-const Img = styled.img`
-  width:600px;
-  height:500px;
-  border-radius:30px;
+const IFrame = styled.iframe`
+  width: 600px;
+  height: 500px;
+  border-radius:40px;
+  margin-right:10px;
 `;
+
 function Road() {
-  //1) map 보여주기
-  
-  const [map, setMap] = useState<any>();
-  const [marker, setMarker] = useState<any>();
-  const [state, setState] = useState()
-
-  /*
-  const kakaoAPI = window.kakao.maps;
-  const options = { //지도를 생성할 때 필요한 기본 옵션
-    center: new kakaoAPI.LatLng( 37.54365822551167,  126.97226557852383), //지도의 중심좌표.
-    level: 4 //지도의 레벨(확대, 축소 정도)
-  };
-  //const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-  const container = useRef(null);
-  
-  useEffect(() => {
-    //const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-    setMap(new kakaoAPI.Map(container.current, options));
-  }, []);
-  */
-// API URL
-
-// requestBody
-const requestBody = {
-  startPlace: '출발지 장소명',
-  endPlace: '도착지 장소명',
-  content: '후기 텍스트 내용'
-};
-
+  const history = useHistory();
+  const [mapUrl,setMapUrl] = useState<string | null>(""); //Recoil로 수정
 
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
@@ -215,25 +182,11 @@ const requestBody = {
       review:"",
     },
   });
-  const history = useHistory();
-  const [road, setRoad] = useRecoilState(roadState);
-  const [count,setCount]  = useState(7);
-  const [photo,setPhoto] = useState(false);
-  const onclick = () => {
-    setPhoto((prev) =>! prev);
-  };
   
-  const [data, setData] = useState(null);
   const onValid = ({start,end, review}: IForm) => {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
-    
-    setRoad((oldRoad) => {
-     setCount((count) => count+1);
-     console.log(count);
-     return  [...oldRoad,{id:count, start:start, end:end, review:review}]
-    });
 
-    axios.get('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', {
+    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', {
       params: {
         startPlace:start,
         endPlace:end,
@@ -241,20 +194,24 @@ const requestBody = {
       }
     })
     .then((response) => {
-      //console.log(response.data);
+     setMapUrl(response.data.mapUrl);//응답으로 해당 장소 "mapURL" 받아오기
+     console.log(response);
     }).catch(function (error) {
       //오류 발생 시 실행될 문장
+      console.log("서버에 후기 작성 정보를 보내는데 실패했습니다");
     }).then(function() {
         // 항상 실행
     });
 
-
+    /*입력창 초기화*/
     setValue("start", "");
     setValue("end", "");
     setValue("review", "");
-    console.log(road);
+
+    /*받아온 mapUrl 화면에 표시할 수 있도록 설정*/
+    
   };
-  const road_11 = require("../images/11.png");
+
   return (
     <>
       <Wrapper>
@@ -263,13 +220,9 @@ const requestBody = {
           <Board>
           <CreateForm>
             <MapBox 
-            //id="map" 
-            //ref = {container} 
             >
-              { photo ? (
-              <Img
-              src={require(`../images/11.png`)}
-            />
+              { mapUrl ? (
+              <IFrame title="Naver Map" src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></IFrame>
             ):null
             }
             </MapBox>
@@ -308,7 +261,7 @@ const requestBody = {
                   })}
                 />
               </RoadBox>
-              <Button onClick ={onclick}> 후기 저장</Button>
+              <Button > 후기 저장</Button>
             </CreateForm>   
 
 

@@ -101,7 +101,7 @@ function Update() {
     },
   });
   const onValid = ({name, password,passwordConfirm}: IForm) => {
-    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/change-password',
+    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/MemberInfo-change',
     {
       newPassword:password,
       newPasswordConfirm:passwordConfirm,
@@ -116,11 +116,11 @@ function Update() {
     })
     .then((response) => {
       window.alert('회원 정보 수정이 완료되었습니다.')
-      console.log(response);
+      console.log(response);//수정된 회원정보 받아오기
       history.push('/Mypage');
     })
     .catch((error) => {
-      console.log(error.response.data);
+      console.log(error.response);
       window.alert(error);
     })
     
