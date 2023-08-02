@@ -170,10 +170,9 @@ const LogoItems = styled.ul`
               </Link>
             </Item>
             <Item>
-              {member !== 0 ?(<Link to="/Mypage">
+              <Link to="/Mypage">
                 마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
-              </Link>) : null
-              }
+              </Link>
               
             </Item>
             </Items>

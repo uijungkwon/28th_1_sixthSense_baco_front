@@ -186,15 +186,21 @@ function Road() {
   const onValid = ({start,end, review}: IForm) => {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
 
-    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', {
-      params: {
+    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', 
+    {
         startPlace:start,
         endPlace:end,
         content:review,
+    },
+    {
+      headers: {
+        //'Content-Type': 'application/json',
+        //"Access-Control-Allow-Origin" : "*",
       }
-    })
+    }
+    )
     .then((response) => {
-     setMapUrl(response.data.mapUrl);//응답으로 해당 장소 "mapURL" 받아오기
+     setMapUrl(response.data.mapUrl);//응답으로 해당 장소 "mapURL" 받아오기!
      console.log(response);
     }).catch(function (error) {
       //오류 발생 시 실행될 문장
@@ -222,8 +228,8 @@ function Road() {
             <MapBox 
             >
               { mapUrl ? (
-              <IFrame title="Naver Map" src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></IFrame>
-            ):null
+              <IFrame title="Naver Map" src = {mapUrl} /*" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%"*/ style={{ border: "none", overflow: "hidden" }}></IFrame>
+            ):<div style = {{color:"black"}}> map loading...</div>
             }
             </MapBox>
           </CreateForm>

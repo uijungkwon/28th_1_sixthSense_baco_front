@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import { isnameAtom } from '../atoms';
-import { useRecoilState } from 'recoil';
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { isnameAtom,isLoginAtom, roadState } from "../atoms";
 import axios from 'axios';
 
 const Wrapper = styled(motion.div)`
@@ -100,8 +100,11 @@ function Update() {
       passwordConfirm:""
     },
   });
+
+  const userID = useRecoilValue(isLoginAtom);
+
   const onValid = ({name, password,passwordConfirm}: IForm) => {
-    axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/MemberInfo-change',
+    axios.post(`https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/MemberInfo-change/${userID}`,
     {
       newPassword:password,
       newPasswordConfirm:passwordConfirm,
@@ -111,12 +114,11 @@ function Update() {
       headers: {
         //'Content-Type': 'application/json',
         //"Access-Control-Allow-Origin" : "*",
-
       }
     })
     .then((response) => {
       window.alert('회원 정보 수정이 완료되었습니다.')
-      console.log(response);//수정된 회원정보 받아오기
+      console.log(response);//수정된 회원정보 받아오기! => 정보는 알아서 백엔드 처리
       history.push('/Mypage');
     })
     .catch((error) => {

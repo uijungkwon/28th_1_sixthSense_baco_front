@@ -4,9 +4,8 @@ import { useEffect,useRef, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { contentState } from "./atoms";
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { roadState } from "../atoms";
+import { isLoginAtom, roadState } from "../atoms";
 import { useQuery } from "react-query";
-import { fetchCoins, fetchRoads } from "../api";
 import axios from "axios";
 
 const Wrapper = styled(motion.div)`
@@ -100,44 +99,62 @@ const H1 = styled.h1`
   color:black;
 `;
 
-interface IRoad {
+//back이랑 연동!
+const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
+interface IReview {  //백에서 주는 목록 string
+  review_id:number; //해당 목록 review_id 가져옴
+  startPlace: string;
+  endPlace:string;
   content: string;
-  mapUrl: string; //review_id 필요?
+  date:number[];
+  hashtag:string;
+  route_point: any;
 }
-function fetchItems() {
-  return fetch("https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/My-reviews")
+
+interface InfoData{
+ content:string;
+ mapUrl: string;
+}
+//목록 하나 상세보기 
+
+
+function MyList(){
+  
+const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
+
+const userID = useRecoilValue(isLoginAtom); //로그인 할 때 받아온 id 값 
+
+function fetchReview() {
+  return fetch(`${BASE_URL}/Mypage/My-reviews/${userID}`)
   .then((response) =>
     response.json() //후기 목록 전체 가져오기
   );
 }
 
-function MyList(){
-      //1)데이터 가져오기
-      const {  isLoading, data:RoadData } = useQuery<IRoad>("Road", fetchItems);
+function fetchReviewInfo(review_id: number ) {
+  return fetch(`${BASE_URL}/Review/detail/${review_id}`).then((response) =>
+    response.json()
+  );
+}
+    //1)데이터 가져오기
+    const {  isLoading, data: reviewData } = useQuery<IReview[]>("allReview",fetchReview);
+    //console.log(reviewData);
 
-      console.log(RoadData);
-      //const testName = Coindata?.slice(0,1).map((coin) => coin.id);
-      //console.log(testName);
+    const [id, setId] = useState("0");
+    const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+      ['info', id],
+      () => fetchReviewInfo(parseInt(id))
+    );
+    
 
-      
-      const [isOpen, setIsOpen] = useState(false);
-      const openModalHandler = () => {
-        console.log()
-        setIsOpen(!isOpen);
-      };
-
-    //1) 백엔드에서 가져온 데이터라고 가정
     const history = useHistory();
     //1-1) 하나의 박스(저장 경로) 를 선택했을 때 나타나는 동작 설정  
-    const onBoxClicked = (itemId: number)=>{
-      history.push(`/Mypage/MyList/${itemId}`);
+    const onBoxClicked = (review_id: number)=>{
+      history.push(`/Mypage/MyList/${review_id}`);
     };
-      
-  //recoil 사용 선언부!! id, start, end , review 가져옴
+
+  //내가 임시로 만든 데이터 
     const [road, setRoad] = useRecoilState(roadState);
-    //예비 데이터 구현
-    //예비 데이터 안에 있는 id랑 매칭 시키고 있음 
-    const [reviewData, setReviewData] = useState({});
     const data = [
       {"id":1, "출발":"숙명여자대학교" , "도착":"여의도 안내센터" , 
       "후기":"자전거 길이 잘 구현되어 있어요. 길 옆에 나무들이 많아서 기분이 좋아져요! 중간에 차도와 가까워서 조금 위험한 부분도 있지만 전체적으로 자연과 가까운 코스입니다!" , 
@@ -165,112 +182,98 @@ function MyList(){
       "타입": "비추코스"
       },
     ];
+    
+    const bigRoadMatch = useRouteMatch<{ review_id: string }>("/Mypage/MyList/:review_id");
+    const clickedBoxOne = bigRoadMatch?.params.review_id && reviewData?.find((item) => item.review_id === +bigRoadMatch.params.review_id);
+    
+    
+
+
+    const onOverlayClick = ()=> history.push("/Mypage/MyList/");
+    const {scrollY} = useScroll();
+
+    return (
+   <>
+    <Wrapper>
+      <AnimatePresence>
+      {isLoading? (<div style = {{color:"black"}}> loading....</div>) 
+      
+      : (
+        <>
+          <Ul>
+            {reviewData?.map((review) => (
+            <li>
+              <Box 
+                layoutId={review.review_id+""}
+                key={review.review_id}
+                onClick = {()=>
+                   {onBoxClicked(review.review_id)
+                   setId(review.review_id+"")}
+                    
+                  }
+              >
+               [ {review.review_id} ]  출발지: {review.startPlace} , 도착지: {review.endPlace} 
+            </Box>
+            </li>
+            ))}
+    
+        </Ul>
+        </>
+        )}
+        
+        </AnimatePresence>
+
+        <AnimatePresence>
+
+      {bigRoadMatch ? (
+        <>
+      <Overlay 
+      onClick = {onOverlayClick}
+      exit = {{opacity:0}}
+      animate = {{opacity: 1}}
+      />
+      <BigBox
+        layoutId={bigRoadMatch.params.review_id+""}
+        style = {{top:scrollY.get() + 100, }}
+      >
+
+      {
+        clickedBoxOne && 
+        (<>
+          <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+            <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+          </div>
+          <FontBox>
+            <Title > 후기 </Title>
+            <H1>{clickedBoxOne.content}</H1>
+            </FontBox>
+          </>)
+      }
+    </BigBox>
+    </>
+    ) : null}
+
+          </AnimatePresence>
+        </Wrapper>
+  </>
+    );
+}
+export default MyList;
 
     //나의 후기 페이지에 들어왔을때, 백에서 목록을 한번에 받아옴
     /*
-    useEffect(() => {//userID가 필요없다고 하여, 정보 전송 없이 GET 만함
+    useEffect(() => {
       axios.get('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/My-reviews')
-    .then((response) => {//응답으로 해당 장소 "mapURL" 받아오기
+    .then((response) => {
      console.log(response);
     })
     .catch(function (error) {
       //오류 발생 시 실행될 문장
       console.log(error);
-      console.log("서버에서 나의 후기목록을 불러오는데 실패했습니다.");
+      console.log("서버에서 '나의 후기 목록' 을 불러오는데 실패했습니다.");
     })
     .then(function() {
         // 항상 실행
     });
     }, []);
-*/
-    const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Mypage/MyList/:itemId");
-
-    const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
-    const clickedBoxTwo = bigRoadMatch?.params.itemId && road.find((item) => item.id === +bigRoadMatch.params.itemId);
-    //백이랑 연결하면 data => RoadData로 변경하면됨
-
-    const onOverlayClick = ()=> history.push("/Mypage/MyList/");
-    const {scrollY} = useScroll();
-
-
-    return (
-       <>
-        <Wrapper>
-            <AnimatePresence>
-              
-                <Ul>
-                  <li>{data.map((item) => (
-                  <Box 
-                   layoutId={item.id +""}
-                   key={item.id}
-                   onClick = {()=> onBoxClicked(item.id)}
-                   >
-                   [ {item.id} ]  출발지: {item.출발} , 도착지: {item.도착} 
-                  </Box>
-                ))}</li>
-                <li>{road.map((item) => (
-                  <Box 
-                   layoutId={item.id+""}
-                   key={item.id}
-                   onClick = {()=> onBoxClicked(item.id)}
-                   >
-                   [{item.id} ] | 출발지: {item.start}  ,  도착지: {item.end} 
-                  </Box>
-                ))}</li>
-                </Ul>
-                
-            </AnimatePresence>
-
-            <AnimatePresence>
-            
-            {bigRoadMatch ? (
-              <>
-              <Overlay 
-                onClick = {onOverlayClick}
-                exit = {{opacity:0}}
-                animate = {{opacity: 1}}
-              />
-              <BigBox
-                layoutId={bigRoadMatch.params.itemId+""}
-                style = {{top:scrollY.get() + 100, }}
-              >
-              
-              {
-                clickedBoxOne && 
-                (<>
-                <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                <iframe title="Naver Map" src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
-                </div>
-                <FontBox>
-                  <Title > 후기 </Title>
-                  <H1>{clickedBoxOne.후기}</H1>
-                </FontBox>
-                </>)
-              }
-              {
-                clickedBoxTwo && 
-                (<>
-                <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                <iframe title="Naver Map" src=" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
-                </div>
-                <FontBox>
-                   <Title>후기</Title>
-                  <H1> {clickedBoxTwo.review} </H1>
-                </FontBox>
-                </>)
-              }
-              </BigBox>
-            </>
-            ) : null}
-            
-          </AnimatePresence>
-        </Wrapper>
-       </>
-    );
-}
-export default MyList;
-/*
-<Img
-                  src={require(`../images/${clickedBoxOne.id}.png`)}
-                />
 */
