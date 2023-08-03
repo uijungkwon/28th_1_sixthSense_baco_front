@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { isnameAtom,isLoginAtom, roadState } from "../atoms";
+import { isLoginAtom,  isNickNameAtom } from "../atoms";
 import axios from 'axios';
 
 const Wrapper = styled(motion.div)`
@@ -91,7 +91,7 @@ interface IForm { //start 값의 타입
 }
 
 function Update() {
-  const [nameValue,setNameValue] = useRecoilState(isnameAtom);
+  const [nickname,setnickname] = useRecoilState(isNickNameAtom);
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
@@ -119,6 +119,7 @@ function Update() {
     .then((response) => {
       window.alert('회원 정보 수정이 완료되었습니다.')
       console.log(response);//수정된 회원정보 받아오기! => 정보는 알아서 백엔드 처리
+      setnickname((nickname) => response?.data?.nickname);//반환된 새 닉네임 가져옴
       history.push('/Mypage');
     })
     .catch((error) => {

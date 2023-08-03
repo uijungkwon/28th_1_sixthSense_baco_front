@@ -27,7 +27,7 @@ export const isEmailAtom = atom({
     key: 'isEmail',
     default: "",
   });
-export const isnameAtom = atom({
-    key: 'isname',
-    default: "따숙따숙",
+export const isNickNameAtom = atom({
+    key: 'isNickName',
+    default: "",
   });

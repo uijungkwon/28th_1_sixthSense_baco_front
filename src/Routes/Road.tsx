@@ -13,7 +13,7 @@ import { useEffect, useState,useRef } from "react";
 import { Map } from "react-kakao-maps-sdk";
 import { useHistory } from "react-router-dom";
 import { contentState } from "./atoms";
-import { roadState } from "../atoms";
+import { isEmailAtom, roadState } from "../atoms";
 import axios from "axios";
 const roadBg = require("../images/roadBg.png");
 
@@ -173,7 +173,7 @@ const IFrame = styled.iframe`
 function Road() {
   const history = useHistory();
   const [mapUrl,setMapUrl] = useState<string | null>(""); //Recoil로 수정
-
+  const email = useRecoilValue(isEmailAtom);
   const { register, handleSubmit, setValue,getValues, formState: { errors,isDirty }, watch} =useForm<IForm>({
     mode: "onSubmit",
     defaultValues: {
@@ -187,7 +187,7 @@ function Road() {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
 
     axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', 
-    {
+    {   email:email , //"kuj08036410@gmail.com",
         startPlace:start,
         endPlace:end,
         content:review,
@@ -201,7 +201,7 @@ function Road() {
     )
     .then((response) => {
      setMapUrl(response.data.mapUrl);//응답으로 해당 장소 "mapURL" 받아오기!
-     console.log(response);
+     console.log(response.data);
     }).catch(function (error) {
       //오류 발생 시 실행될 문장
       console.log("서버에 후기 작성 정보를 보내는데 실패했습니다");

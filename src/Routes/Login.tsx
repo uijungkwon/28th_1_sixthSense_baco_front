@@ -113,7 +113,7 @@ function Login() {
   } = useForm<FormData>(); // Specify the generic type here
  const history = useHistory();
  const [member,setMember] = useRecoilState(isLoginAtom);
-
+ const [email, setEmail] = useRecoilState(isEmailAtom);
    const onSubmit = ({email,password}: FormData) => {
     axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/login',
     {
@@ -130,7 +130,8 @@ function Login() {
     .then((response) => {
       window.alert('로그인 완료되었습니다.')
       setMember((member=> response?.data?.member_id));
-      console.log(response?.data?.member_id);
+      setEmail((email) => response?.data?.email)
+      console.log(response?.data);
       history.push('/')
     })
     .catch((error) => {

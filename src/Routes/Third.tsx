@@ -3,7 +3,8 @@ import { styled } from "styled-components";
 import { useEffect,useRef, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { isnameAtom } from "../atoms";
+import { isNickNameAtom } from "../atoms";
+import { useQuery } from "react-query";
 const Container = styled.div`
   height: 100vh;
   padding: 0px 20px;
@@ -116,94 +117,120 @@ const H1 = styled.h1`
   font-size:17px;
   color:black;
 `;
-function Third(){
-    const name = useRecoilValue(isnameAtom);
-    const data = [
-        {"id":5,"name":`${name}`, "출발":"월드컵 경기장" , "도착":"숙명여자대학교" , 
-        "후기":" 중간에 한강을 지나갈때 풍경은 좋지만, 거의 대부분 아파트 단지 풍경이라 볼게 없어요. 그리고 3시간 정도의 코스이니 매우 힘듭니다.특히 한강 다리를 건널때 고비에요. ", 
-        "작성일":"2023.07.27"
-  
-        },
-        {"id":6,"name":`${name}`,"출발":"남산타워" , "도착":"숙명여자대학교" , 
-        "후기": "20분 정도의 코스라 짧긴 하지만 경사가 높은 곳이 많아 너무 힘들어요. 특히 남산 타워에서 내려올 때 내리막길이여도 경사가 급해서 너무 위험했어요.", 
-        "작성일":"2023.07.28"
-        },
-        {"id":9,"name":"솔방울","출발":"서울숲" , "도착":"느티나무집" , 
-        "후기": "서울 중심부에 비하면 사람이 적어서 여유롭게 탈 수 있고 나무도 훨씬 많아요.하지만 소요시간이 거의 2시간 정도되고 오르막길과 내리막길이 끝없이 이어져서 너무 힘들어요. 체력이 약한사람은 비추입니다.", 
-        "작성일":"2023.07.29"
-        },
-        {"id":10,"name":"따롱이","출발":"뚝섬역 " , "도착":"공릉역" , 
-        "후기": "평지가 이어져서 자전거 타기에는 나쁘지않아요. 다만 풍경이 거의 변하지 않아서 지루한 느낌이 많아요. 그리고 바로 옆에 동부간선 도로가 있어서 차가 많이 지나다녀서 소음이 조금 심해요.", 
-        "작성일":"2023.07.31"
-        },
-    ];
-    const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Review/Third/:itemId");
-    const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
-    const history = useHistory();
-    const onOverlayClick = ()=> history.push("/Review/Third/");
-    const {scrollY} = useScroll();
-    const onBoxClicked = (itemId: number)=>{
-        history.push(`/Review/Third/${itemId}`);
-      }
-    return (
-        <>
-            <Container >
-            <AnimatePresence>
-                <ul>
-                    <li>{data.map((item) => (
-                    <Box 
-                    layoutId={item.id +""}
-                    key={item.id}
-                    onClick = {()=> onBoxClicked(item.id)}
-                    >
-                        <FontBox>
-                            <Font>[{item.id}] {item.name}</Font>
-                            <Font> {item.출발}~{item.도착}</Font>
-                            <Font>{item.작성일}</Font>    
-                        </FontBox>
-                    
-                    </Box>
-                    ))}</li>
-                </ul>
-                </AnimatePresence>
-                <AnimatePresence>
-            
-            {bigRoadMatch ? (
-              <>
-              <Overlay 
-                onClick = {onOverlayClick}
-                exit = {{opacity:0}}
-                animate = {{opacity: 1}}
-              />
-              <BigBox
-                layoutId={bigRoadMatch.params.itemId+""}
-                style = {{top:scrollY.get() + 100, }}
-              >
-              
-              {
-                clickedBoxOne && 
-                (<>
-                <Div >
-                  <Img
-                  src={require(`../images/${clickedBoxOne.id}.png`)}
-                />
-                </Div>
-                <ReviewBox>
-                  <Title > 후기 </Title>
-                  <H1>{clickedBoxOne.후기}</H1>
-                </ReviewBox>
-                </>)
-               }
-              </BigBox>
-            </>
-            ) : null}
-            
-          </AnimatePresence>
-            </Container>
-        </>
-        //style={{ paddingRight:50}}
+//back이랑 연동!
+const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
+interface IReview {
+  review_id:number; 
+  startPlace: string;
+  endPlace:string;
+  content: string;
+  date:number[];
+  hashtag:string;
+  route_point: any;  //닉네임 추가해야할 것 같음!!
+}
 
-    );
+interface InfoData{
+ content:string;
+ mapUrl: string;
+}
+
+
+function Third(){function fetchReviewBoard() {
+  return fetch(`${BASE_URL}/Review/reviews?hashtag=3`)
+  .then((response) =>
+    response.json() //"힐링 태그" 목록 전체 가져오기
+  );
+}
+
+function fetchReviewInfo(review_id: string ) { //목록 클릭 시 상세 데이터 조회
+  return fetch(`${BASE_URL}/Review/detail/${review_id}`).then((response) =>
+    response.json()
+  );
+}
+  const nickname = useRecoilValue(isNickNameAtom);
+  
+  const {  isLoading, data: reviewData } = useQuery<IReview[]>("allReview",fetchReviewBoard);
+    //console.log(reviewData);
+  
+  const [id, setId] = useState("0");
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+      ['info', id],
+      () => fetchReviewInfo(id)
+    );   
+
+  const bigRoadMatch = useRouteMatch<{ review_id: string }>("/Review/Third/:review_id");
+  const clickedBoxOne = bigRoadMatch?.params.review_id && reviewData?.find((item) => item.review_id === +bigRoadMatch.params.review_id);
+  const history = useHistory();
+
+  const onOverlayClick = ()=> history.push("/Review/Third/");
+  const {scrollY} = useScroll();
+
+  const onBoxClicked = (review_id: string)=>{
+      history.push(`/Review/Third/${review_id}`);
+    };
+
+  return (
+      <>
+          <Container >
+          <AnimatePresence>
+          <ul>
+                  <li>{reviewData?.map((item) => (
+                  <Box 
+                  layoutId={item.review_id +""}
+                  key={item.review_id}
+                  onClick = {()=>
+                    {onBoxClicked(item.review_id+"")
+                    setId(item.review_id+"")}// 바꾸기!
+                   }
+                  >
+                   <FontBox>
+                          <Font>[{item.review_id}] {item.review_id}</Font>
+                          <Font> {item.startPlace}~{item.endPlace}</Font>
+                          <Font>{item.date[0] }ㅡ{item.date[1] }ㅡ{item.date[2] }</Font>    
+                      </FontBox>
+                  </Box>
+                  ))}</li>
+              </ul>
+              </AnimatePresence>
+
+              <AnimatePresence>
+          
+          {bigRoadMatch ? (
+            <>
+            <Overlay 
+              onClick = {onOverlayClick}
+              exit = {{opacity:0}}
+              animate = {{opacity: 1}}
+            />
+            <BigBox
+              layoutId={bigRoadMatch.params.review_id+""}
+              style = {{top:scrollY.get() + 100, }}
+            >
+            
+            {
+              clickedBoxOne && 
+              (<>
+              <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+              </div>
+              <ReviewBox>
+                <Title > 후기 </Title>
+                <H1>{clickedBoxOne.content}</H1>
+              </ReviewBox>
+              </>)
+             }
+            </BigBox>
+          </>
+          ) : null}
+          
+        </AnimatePresence>
+
+
+
+          </Container>
+      </>
+      
+  );
 
 }
 export default Third;

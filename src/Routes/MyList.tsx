@@ -119,8 +119,6 @@ interface InfoData{
 
 
 function MyList(){
-  
-const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
 
 const userID = useRecoilValue(isLoginAtom); //로그인 할 때 받아온 id 값 
 
@@ -131,7 +129,7 @@ function fetchReview() {
   );
 }
 
-function fetchReviewInfo(review_id: number ) {
+function fetchReviewInfo(review_id: string ) { //데이터 있는걸 가져오기!
   return fetch(`${BASE_URL}/Review/detail/${review_id}`).then((response) =>
     response.json()
   );
@@ -143,14 +141,15 @@ function fetchReviewInfo(review_id: number ) {
     const [id, setId] = useState("0");
     const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
       ['info', id],
-      () => fetchReviewInfo(parseInt(id))
+      () => fetchReviewInfo(id)
     );
-    
+   
 
     const history = useHistory();
     //1-1) 하나의 박스(저장 경로) 를 선택했을 때 나타나는 동작 설정  
-    const onBoxClicked = (review_id: number)=>{
+    const onBoxClicked = (review_id: string)=>{
       history.push(`/Mypage/MyList/${review_id}`);
+      console.log(infoData);
     };
 
   //내가 임시로 만든 데이터 
@@ -186,9 +185,6 @@ function fetchReviewInfo(review_id: number ) {
     const bigRoadMatch = useRouteMatch<{ review_id: string }>("/Mypage/MyList/:review_id");
     const clickedBoxOne = bigRoadMatch?.params.review_id && reviewData?.find((item) => item.review_id === +bigRoadMatch.params.review_id);
     
-    
-
-
     const onOverlayClick = ()=> history.push("/Mypage/MyList/");
     const {scrollY} = useScroll();
 
@@ -207,9 +203,8 @@ function fetchReviewInfo(review_id: number ) {
                 layoutId={review.review_id+""}
                 key={review.review_id}
                 onClick = {()=>
-                   {onBoxClicked(review.review_id)
-                   setId(review.review_id+"")}
-                    
+                   {onBoxClicked(review.review_id+"")
+                   setId(review.review_id+"")}// 바꾸기!
                   }
               >
                [ {review.review_id} ]  출발지: {review.startPlace} , 도착지: {review.endPlace} 

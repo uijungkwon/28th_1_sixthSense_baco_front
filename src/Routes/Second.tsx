@@ -3,7 +3,8 @@ import { styled } from "styled-components";
 import { useEffect,useRef, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { isnameAtom } from "../atoms";
+import { isNickNameAtom } from "../atoms";
+import { useQuery } from "react-query";
 const Container = styled.div`
   height: 100vh;
   padding: 0px 20px;
@@ -115,86 +116,122 @@ const H1 = styled.h1`
   font-size:17px;
   color:black;
 `;
+//back이랑 연동!
+const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
+interface IReview {
+  review_id:number; 
+  startPlace: string;
+  endPlace:string;
+  content: string;
+  date:number[];
+  hashtag:string;
+  route_point: any;  //닉네임 추가해야할 것 같음!!
+}
+
+interface InfoData{
+ content:string;
+ mapUrl: string;
+}
+
+
 function Second(){
-    const name = useRecoilValue(isnameAtom);
-    const data = [
-        {"id":3, "name":`${name}`,"출발":"홍익대학교" , "도착":"숙명여자대학교" , 
-        "후기":" 주변에 맛집, 먹거리가 많아서 놀기에 좋아요. 그런데 차도가 많이나와서 약간 위험한것 같아요. 그리고 유동인구가 많아 제대로 달리지 못할 때도 있어요", 
-        "작성일":"2023.07.21"
-        },
-        {"id":4, "name":`${name}`,"출발":"어린이 대공원" , "도착":"서울숲" , 
-        "후기":" 여기는 풍경이 강점이에요. 나무들이 많아서 길을 달리면서 맑은 공기를 마실 수 있어요. ", 
-        "작성일":"2023.07.24",},
-        {"id":8, "name":"탕후루","출발":"광화문역 5번출구" , "도착":"동대문역" , 
-        "후기":" 청계천 옆을 따라 달리는 코스라서 풍경은 좋아요. 다만 경로에 번화가가 많아서 횡단보도가 자주나와 계속 멈춰야하는것이 단점이에요 ", 
-        "작성일":"2023.07.24",},
-    ];
-    const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Review/Second/:itemId");
-    const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
-    const history = useHistory();
-    const onOverlayClick = ()=> history.push("/Review/Second/");
-    const {scrollY} = useScroll();
-    const onBoxClicked = (itemId: number)=>{
-        history.push(`/Review/Second/${itemId}`);
-      }
-    return (
-        <>
-            <Container >
-            <AnimatePresence>
-                <ul>
-                    <li>{data.map((item) => (
-                    <Box 
-                    layoutId={item.id +""}
-                    key={item.id}
-                    onClick = {()=> onBoxClicked(item.id)}
-                    >
-                     <FontBox>
-                            <Font>[{item.id}] {item.name}</Font>
-                            <Font> {item.출발}~{item.도착}</Font>
-                            <Font>{item.작성일}</Font>    
-                        </FontBox>
-                    </Box>
-                    ))}</li>
-                </ul>
-            </AnimatePresence>
-
-                <AnimatePresence>
-            
-            {bigRoadMatch ? (
-              <>
-              <Overlay 
-                onClick = {onOverlayClick}
-                exit = {{opacity:0}}
-                animate = {{opacity: 1}}
-              />
-              <BigBox
-                layoutId={bigRoadMatch.params.itemId+""}
-                style = {{top:scrollY.get() + 100, }}
-              >
-              
-              {
-                clickedBoxOne && 
-                (<>
-                <Div >
-                  <Img
-                  src={require(`../images/${clickedBoxOne.id}.png`)}
-                />
-                </Div>
-                <ReviewBox>
-                  <Title > 후기 </Title>
-                  <H1>{clickedBoxOne.후기}</H1>
-                </ReviewBox>
-                </>)
-               }
-              </BigBox>
-            </>
-            ) : null}
-            
-          </AnimatePresence>
-            </Container>
-        </>
-
+  function fetchReviewBoard() {
+    return fetch(`${BASE_URL}/Review/reviews?hashtag=2`)
+    .then((response) =>
+      response.json() //"힐링 태그" 목록 전체 가져오기
     );
+  }
+  
+  function fetchReviewInfo(review_id: string ) { //목록 클릭 시 상세 데이터 조회
+    return fetch(`${BASE_URL}/Review/detail/${review_id}`).then((response) =>
+      response.json()
+    );
+  }
+    const nickname = useRecoilValue(isNickNameAtom);
 
+    
+        const {  isLoading, data: reviewData } = useQuery<IReview[]>("allReview",fetchReviewBoard);
+        //console.log(reviewData);
+      
+      const [id, setId] = useState("0");
+      const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+          ['info', id],
+          () => fetchReviewInfo(id)
+        );   
+  
+      const bigRoadMatch = useRouteMatch<{ review_id: string }>("/Review/Second/:review_id");
+      const clickedBoxOne = bigRoadMatch?.params.review_id && reviewData?.find((item) => item.review_id === +bigRoadMatch.params.review_id);
+      const history = useHistory();
+  
+      const onOverlayClick = ()=> history.push("/Review/Second/");
+      const {scrollY} = useScroll();
+  
+      const onBoxClicked = (review_id: string)=>{
+          history.push(`/Review/Second/${review_id}`);
+        };
+  
+      return (
+          <>
+              <Container >
+              <AnimatePresence>
+              <ul>
+                      <li>{reviewData?.map((item) => (
+                      <Box 
+                      layoutId={item.review_id +""}
+                      key={item.review_id}
+                      onClick = {()=>
+                        {onBoxClicked(item.review_id+"")
+                        setId(item.review_id+"")}// 바꾸기!
+                       }
+                      >
+                       <FontBox>
+                              <Font>[{item.review_id}] {item.review_id}</Font>
+                              <Font> {item.startPlace}~{item.endPlace}</Font>
+                              <Font>{item.date[0] }ㅡ{item.date[1] }ㅡ{item.date[2] }</Font>    
+                          </FontBox>
+                      </Box>
+                      ))}</li>
+                  </ul>
+                  </AnimatePresence>
+  
+                  <AnimatePresence>
+              
+              {bigRoadMatch ? (
+                <>
+                <Overlay 
+                  onClick = {onOverlayClick}
+                  exit = {{opacity:0}}
+                  animate = {{opacity: 1}}
+                />
+                <BigBox
+                  layoutId={bigRoadMatch.params.review_id+""}
+                  style = {{top:scrollY.get() + 100, }}
+                >
+                
+                {
+                  clickedBoxOne && 
+                  (<>
+                  <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                    <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+                  </div>
+                  <ReviewBox>
+                    <Title > 후기 </Title>
+                    <H1>{clickedBoxOne.content}</H1>
+                  </ReviewBox>
+                  </>)
+                 }
+                </BigBox>
+              </>
+              ) : null}
+              
+            </AnimatePresence>
+  
+  
+  
+              </Container>
+          </>
+          
+      );
+  
 }
 export default Second;

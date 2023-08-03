@@ -3,7 +3,8 @@ import { styled } from "styled-components";
 import { useEffect,useRef, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { isnameAtom } from "../atoms";
+import { isNickNameAtom } from "../atoms";
+import { useQuery } from "react-query";
 const Container = styled.div`
   height: 100vh;
   padding: 0px 20px;
@@ -112,8 +113,42 @@ const H1 = styled.h1`
   font-size:17px;
   color:black;
 `;
+
+//back이랑 연동!
+const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
+interface IReview {
+  review_id:number; 
+  startPlace: string;
+  endPlace:string;
+  content: string;
+  date:number[];
+  hashtag:string;
+  route_point: any;  //닉네임 추가해야할 것 같음!!
+}
+
+interface InfoData{
+ content:string;
+ mapUrl: string;
+}
+
+
 function First(){
-    const name = useRecoilValue(isnameAtom);
+
+  function fetchReviewBoard() {
+    return fetch(`${BASE_URL}/Review/reviews?hashtag=1`)
+    .then((response) =>
+      response.json() //"힐링 태그" 목록 전체 가져오기
+    );
+  }
+  
+  function fetchReviewInfo(review_id: string ) { //목록 클릭 시 상세 데이터 조회
+    return fetch(`${BASE_URL}/Review/detail/${review_id}`).then((response) =>
+      response.json()
+    );
+  }
+    const nickname = useRecoilValue(isNickNameAtom);
+
+    /*
     const data = [
         {"id":1, "name":`${name}`, "출발":"숙명여자대학교" , "도착":"여의도 안내센터" , 
         "후기":"자전거 길이 잘 구현되어 있어요. 길 옆에 나무들이 많아서 기분이 좋아져요! 중간에 차도와 가까워서 조금 위험한 부분도 있지만 전체적으로 자연과 가까운 코스입니다!" , 
@@ -135,30 +170,46 @@ function First(){
         },
     
         ];
-    const bigRoadMatch = useRouteMatch<{ itemId: string }>("/Review/First/:itemId");
-    const clickedBoxOne = bigRoadMatch?.params.itemId && data.find((item) => item.id === +bigRoadMatch.params.itemId);
+        */
+    
+    const {  isLoading, data: reviewData } = useQuery<IReview[]>("allReview",fetchReviewBoard);
+      //console.log(reviewData);
+    
+    const [id, setId] = useState("0");
+    const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+        ['info', id],
+        () => fetchReviewInfo(id)
+      );   
+
+    const bigRoadMatch = useRouteMatch<{ review_id: string }>("/Review/First/:review_id");
+    const clickedBoxOne = bigRoadMatch?.params.review_id && reviewData?.find((item) => item.review_id === +bigRoadMatch.params.review_id);
     const history = useHistory();
+
     const onOverlayClick = ()=> history.push("/Review/First/");
     const {scrollY} = useScroll();
-    const onBoxClicked = (itemId: number)=>{
-        history.push(`/Review/First/${itemId}`);
-      }
+
+    const onBoxClicked = (review_id: string)=>{
+        history.push(`/Review/First/${review_id}`);
+      };
 
     return (
         <>
             <Container >
             <AnimatePresence>
             <ul>
-                    <li>{data.map((item) => (
+                    <li>{reviewData?.map((item) => (
                     <Box 
-                    layoutId={item.id +""}
-                    key={item.id}
-                    onClick = {()=> onBoxClicked(item.id)}
+                    layoutId={item.review_id +""}
+                    key={item.review_id}
+                    onClick = {()=>
+                      {onBoxClicked(item.review_id+"")
+                      setId(item.review_id+"")}// 바꾸기!
+                     }
                     >
                      <FontBox>
-                            <Font>[{item.id}] {item.name}</Font>
-                            <Font> {item.출발}~{item.도착}</Font>
-                            <Font>{item.작성일}</Font>    
+                            <Font>[{item.review_id}] {item.review_id}</Font>
+                            <Font> {item.startPlace}~{item.endPlace}</Font>
+                            <Font>{item.date[0] }ㅡ{item.date[1] }ㅡ{item.date[2] }</Font>    
                         </FontBox>
                     </Box>
                     ))}</li>
@@ -175,21 +226,19 @@ function First(){
                 animate = {{opacity: 1}}
               />
               <BigBox
-                layoutId={bigRoadMatch.params.itemId+""}
+                layoutId={bigRoadMatch.params.review_id+""}
                 style = {{top:scrollY.get() + 100, }}
               >
               
               {
                 clickedBoxOne && 
                 (<>
-                <Div >
-                  <Img
-                  src={require(`../images/${clickedBoxOne.id}.png`)}
-                />
-                </Div>
+                <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                  <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+                </div>
                 <ReviewBox>
                   <Title > 후기 </Title>
-                  <H1>{clickedBoxOne.후기}</H1>
+                  <H1>{clickedBoxOne.content}</H1>
                 </ReviewBox>
                 </>)
                }
