@@ -80,7 +80,7 @@ const Item = styled.li`
 
 // 3) 회원가입/로그인 화면
 const LogItems = styled.ul`
-margin-left: 1300px;
+margin-left: 1150px;
 display: flex;
 position:fixed;
 align-items: center;

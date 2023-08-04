@@ -44,7 +44,7 @@ const Overlay = styled(motion.div)`
   position:fixed;
   opacity:0;
   top:0;
-  width:1300px;
+  width:1600px;
   height:100%;
   background-color: rgba(0,0,0,0.5);
 `;
@@ -77,7 +77,7 @@ const FontBox = styled.div`
   background-color:#c4f0fadf;
   border-radius:30px;
   height: 100px;
-  width:500px;
+  width:540px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,8 +209,8 @@ function fetchReviewInfo(review_id: string ) { //데이터 있는걸 가져오�
       {
         clickedBoxOne && 
         (<>
-          <div style={{ marginBottom:"20px",width: "550px", height: "400px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <iframe title="Naver Map" src= {infoData?.mapUrl} width="620px" height="450px" style={{ border: "none", overflow: "hidden" }}></iframe>
+          <div style={{marginTop:"10px",width: "550px", height: "420px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+            <iframe title="Naver Map" src= {infoData?.mapUrl} width="620px" height="480px" style={{ border: "none", overflow: "hidden" }}></iframe>
           </div>
           <FontBox>
             <Title > 후기 </Title>

@@ -60,8 +60,7 @@ const Overlay = styled(motion.div)`
   position:fixed;
   opacity:0;
   top:0;
-  margin-left:-300px;
-  width:100%;
+  width:1600px;
   height:100%;
   background-color: rgba(0,0,0,0.5);
 `;
@@ -94,7 +93,7 @@ const ReviewBox = styled.div`
   background-color:#c4f0fadf;
   border-radius:30px;
   height: 100px;
-  width:600px;
+  width:540px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -212,8 +211,8 @@ function Second(){
                 {
                   clickedBoxOne && 
                   (<>
-                  <div style={{ marginBottom:"20px",width: "620px", height: "400px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                    <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ backgroundColor:"#ffff81",border: "none", overflow: "hidden" }}></iframe>
+                  <div style={{marginTop:"10px",width: "550px", height: "420px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                    <iframe title="Naver Map" src= {infoData?.mapUrl} width="620px" height="480px" style={{ border: "none", overflow: "hidden" }}></iframe>
                   </div>
                   <ReviewBox>
                     <Title > 후기 </Title>

@@ -46,6 +46,7 @@ const Board = styled(motion.div)`
 `;
 const Title = styled.h1`
   margin-top: 100px;
+  margin-right:-55px;
   font-size:37px;
   color:black;
   font-weight:bold;
@@ -53,8 +54,8 @@ const Title = styled.h1`
 
 const MapBox = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
-  width: 650px;
-  height: 400px;
+  width: 625px;
+  height: 450px;
   margin-right:100px;
   margin-left:100px;
   margin-top:40px;
@@ -96,7 +97,7 @@ const Input = styled.input`
     margin-bottom:40px;
 `;
 const ReviewInput = styled.input`
-    width:400px;
+    width:300px;
     height:100px;
 		border: 1;
 		border-radius: 10px;
@@ -120,7 +121,7 @@ const P = styled.p`
 const RoadBox = styled(motion.div)`
   padding: 0px 20px;
   background: rgba(255, 255, 255, 0.5);
-  width: 500px;
+  width: 450px;
   height: 450px;
   margin-right:100px;
   margin-left:100px;
@@ -166,7 +167,7 @@ interface IForm { //recoil로 만들어서 변수 사용할 수 있도록 만들
 const IFrame = styled.iframe`
   width: 100%;
   height: 100%;
-  margin-left:25px;
+  margin-left:15px;
 `;
 
 function Road() {
