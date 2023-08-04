@@ -76,13 +76,15 @@ const Div = styled.div`
 const FontBox = styled.div`
   background-color:#c4f0fadf;
   border-radius:30px;
-  height: 120px;
+  height: 100px;
+  width:600px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   //margin-top: 50px;
   padding: 10px 10px 10px 10px;
+  position:absoulte;
 `;
 const Img = styled.img`
   width:100%;
@@ -98,7 +100,10 @@ const H1 = styled.h1`
   font-size:17px;
   color:black;
 `;
+const Strong  = styled.strong`
+  font-weight:bold;
 
+`;
 //back이랑 연동!
 const BASE_URL = "https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app";
 interface IReview {  //백에서 주는 목록 string
@@ -176,8 +181,8 @@ function fetchReviewInfo(review_id: string ) { //데이터 있는걸 가져오�
                    setId(review.review_id+"")}// 바꾸기!
                   }
               >
-               {review.startPlace} {rarr} {review.endPlace} 
-            </Box>
+               <h1> {review.startPlace} <Strong>{rarr}</Strong>  {review.endPlace} </h1>
+            </Box> 
             </li>
             ))}
     
@@ -204,8 +209,8 @@ function fetchReviewInfo(review_id: string ) { //데이터 있는걸 가져오�
       {
         clickedBoxOne && 
         (<>
-          <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+          <div style={{ marginBottom:"20px",width: "620px", height: "400px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+            <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ backgroundColor:"#ffff81",border: "none", overflow: "hidden" }}></iframe>
           </div>
           <FontBox>
             <Title > 후기 </Title>

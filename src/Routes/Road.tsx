@@ -53,8 +53,8 @@ const Title = styled.h1`
 
 const MapBox = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
-  width: 600px;
-  height: 420px;
+  width: 650px;
+  height: 400px;
   margin-right:100px;
   margin-left:100px;
   margin-top:40px;
@@ -96,7 +96,7 @@ const Input = styled.input`
     margin-bottom:40px;
 `;
 const ReviewInput = styled.input`
-    width:280px;
+    width:400px;
     height:100px;
 		border: 1;
 		border-radius: 10px;
@@ -164,10 +164,9 @@ interface IForm { //recoil로 만들어서 변수 사용할 수 있도록 만들
   review:string;
 }
 const IFrame = styled.iframe`
-  width: 600px;
-  height: 500px;
-  border-radius:40px;
-  margin-right:10px;
+  width: 100%;
+  height: 100%;
+  margin-left:25px;
 `;
 
 function Road() {
@@ -187,7 +186,7 @@ function Road() {
     //저장 버튼 눌렀을 때 해당 입력들이 저장되도록 생성
 
     axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Review/save', 
-    {   email:email , //"kuj08036410@gmail.com",
+    {   email:email ,
         startPlace:start,
         endPlace:end,
         content:review,
@@ -228,8 +227,8 @@ function Road() {
             <MapBox 
             >
               { mapUrl ? (
-              <IFrame title="Naver Map" src = {mapUrl} /*" https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/mapmap" width="100%" height="100%"*/ style={{ border: "none", overflow: "hidden" }}></IFrame>
-            ):<div style = {{color:"black"}}> map loading...</div>
+              <IFrame title="Naver Map" src = {mapUrl}  ></IFrame>
+            ):<div style = {{color:"black", fontSize:"25px"}}> map loading...</div>
             }
             </MapBox>
           </CreateForm>

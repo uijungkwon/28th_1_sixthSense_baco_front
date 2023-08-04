@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import {  isEmailAtom, isLoginAtom } from "../atoms";
+import {  isEmailAtom, isLoginAtom, isNickNameAtom } from "../atoms";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 
@@ -114,6 +114,7 @@ function Login() {
  const history = useHistory();
  const [member,setMember] = useRecoilState(isLoginAtom);
  const [email, setEmail] = useRecoilState(isEmailAtom);
+ const [nickname, setnickname] = useRecoilState(isNickNameAtom);
    const onSubmit = ({email,password}: FormData) => {
     axios.post('https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/login',
     {
@@ -130,8 +131,8 @@ function Login() {
     .then((response) => {
       window.alert('로그인 완료되었습니다.')
       setMember((member=> response?.data?.member_id));
-      setEmail((email) => response?.data?.email)
-      console.log(response?.data);
+      setEmail((email) => response?.data?.email);
+      setnickname((nickname)=>response?.data?.nickname);
       history.push('/')
     })
     .catch((error) => {

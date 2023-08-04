@@ -9,7 +9,7 @@ import {
   import styled from "styled-components";
   import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { isEmailAtom, isLoginAtom } from "../atoms";
+import { isEmailAtom, isLoginAtom, isNickNameAtom } from "../atoms";
 
   const bike = require("../images/bike.png");
   interface IForm {
@@ -106,7 +106,9 @@ const LogoItems = styled.ul`
     margin: 0 auto;
     background-color: #0044ff;
   `;
- 
+ const Strong = styled.strong`
+  font-weight:bold;
+ `
   function Header() {
     //2) 현재 어느 페이지에 있는지 확인
     const homeMatch = useRouteMatch("/");
@@ -138,7 +140,7 @@ const LogoItems = styled.ul`
 
     const member = useRecoilValue(isLoginAtom);
     const email = useRecoilValue(isEmailAtom);
-
+    const nickname = useRecoilValue(isNickNameAtom);
     return (
     <>
       <Nav
@@ -169,17 +171,19 @@ const LogoItems = styled.ul`
                 후기 공유 게시판 {reviewMatch ? <Circle layoutId="circle" /> : null}
               </Link>
             </Item>
-            <Item>
-              <Link to="/Mypage">
-                마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
-              </Link>
-              
-            </Item>
+            { nickname !=="0" ?(
+              <Item>
+                <Link to="/Mypage">
+                  마이 페이지 {myPageMatch ? <Circle layoutId="circle" /> : null}
+                </Link>
+              </Item>
+            ) : null}
+
             </Items>
             <LogItems>
-            { member !== 0 ?(
+            { nickname !=="0" ?(
               <LogItem style = {{marginLeft:"100px"}}>
-               {member}님 !
+               <h1><Strong>{nickname} 님</Strong> </h1>
              </LogItem>
             ) :(
               <>

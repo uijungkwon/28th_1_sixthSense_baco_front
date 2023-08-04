@@ -40,10 +40,10 @@ const FontBox = styled.div`
 
 `;
 const Font = styled.span`
-  width: 200px;
+  width: 215px;
   font-size: 18px;
   font-weight: 550;
-  margin-left:50px;
+  margin-left:45px;
 
   //background-color: #fabbefd2;
   color: black;
@@ -93,13 +93,15 @@ const Div = styled.div`
 const ReviewBox = styled.div`
   background-color:#c4f0fadf;
   border-radius:30px;
-  height: 120px;
+  height: 100px;
+  width:600px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   //margin-top: 50px;
   padding: 10px 10px 10px 10px;
+  position:absoulte;
 `;
 const Img = styled.img`
   width:100%;
@@ -210,8 +212,8 @@ function Second(){
                 {
                   clickedBoxOne && 
                   (<>
-                  <div style={{ width: "620px", height: "720px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                    <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ border: "none", overflow: "hidden" }}></iframe>
+                  <div style={{ marginBottom:"20px",width: "620px", height: "400px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                    <iframe title="Naver Map" src= {infoData?.mapUrl} width="100%" height="100%" style={{ backgroundColor:"#ffff81",border: "none", overflow: "hidden" }}></iframe>
                   </div>
                   <ReviewBox>
                     <Title > 후기 </Title>

@@ -29,5 +29,5 @@ export const isEmailAtom = atom({
   });
 export const isNickNameAtom = atom({
     key: 'isNickName',
-    default: "",
+    default: "0",
   });
