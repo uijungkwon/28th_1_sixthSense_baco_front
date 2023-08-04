@@ -123,10 +123,10 @@ interface IReview {
   review_id:number; 
   startPlace: string;
   endPlace:string;
-  content: string;
   date:number[];
   hashtag:string;
-  route_point: any;  //닉네임 추가해야할 것 같음!!
+  nickname: string; //추가할 값!
+
 }
 
 interface InfoData{
@@ -148,7 +148,7 @@ function fetchReviewInfo(review_id: string ) { //목록 클릭 시 상세 데이
   );
 }
   const nickname = useRecoilValue(isNickNameAtom);
-  
+  const rarr = "===>"
   const {  isLoading, data: reviewData } = useQuery<IReview[]>("allReview",fetchReviewBoard);
     //console.log(reviewData);
   
@@ -184,9 +184,9 @@ function fetchReviewInfo(review_id: string ) { //목록 클릭 시 상세 데이
                    }
                   >
                    <FontBox>
-                          <Font>[{item.review_id}] {item.review_id}</Font>
-                          <Font> {item.startPlace}~{item.endPlace}</Font>
-                          <Font>{item.date[0] }ㅡ{item.date[1] }ㅡ{item.date[2] }</Font>    
+                          <Font> {item.nickname}</Font>
+                          <Font> {item.startPlace}{rarr}{item.endPlace}</Font>
+                          <Font>{item.date[0] }.{item.date[1] }.{item.date[2] }</Font>    
                       </FontBox>
                   </Box>
                   ))}</li>
@@ -215,7 +215,7 @@ function fetchReviewInfo(review_id: string ) { //목록 클릭 시 상세 데이
               </div>
               <ReviewBox>
                 <Title > 후기 </Title>
-                <H1>{clickedBoxOne.content}</H1>
+                <H1>{infoData?.content}</H1>
               </ReviewBox>
               </>)
              }

@@ -40,11 +40,10 @@ const FontBox = styled.div`
 
 `;
 const Font = styled.span`
-  width: 160px;
+  width: 200px;
   font-size: 18px;
-  font-weight: 400;
-
-  margin-left:70px;
+  font-weight: 550;
+  margin-left:50px;
 
   //background-color: #fabbefd2;
   color: black;
@@ -120,10 +119,10 @@ interface IReview {
   review_id:number; 
   startPlace: string;
   endPlace:string;
-  content: string;
   date:number[];
   hashtag:string;
-  route_point: any;  //닉네임 추가해야할 것 같음!!
+  nickname: string; //추가할 값!
+
 }
 
 interface InfoData{
@@ -191,7 +190,7 @@ function First(){
     const onBoxClicked = (review_id: string)=>{
         history.push(`/Review/First/${review_id}`);
       };
-
+    const rarr = "===>"
     return (
         <>
             <Container >
@@ -207,9 +206,9 @@ function First(){
                      }
                     >
                      <FontBox>
-                            <Font>[{item.review_id}] {item.review_id}</Font>
-                            <Font> {item.startPlace}~{item.endPlace}</Font>
-                            <Font>{item.date[0] }ㅡ{item.date[1] }ㅡ{item.date[2] }</Font>    
+                            <Font> {item.nickname}</Font>
+                            <Font> {item.startPlace}{rarr}{item.endPlace}</Font>
+                            <Font>{item.date[0] }.{item.date[1] }.{item.date[2] }</Font>    
                         </FontBox>
                     </Box>
                     ))}</li>
@@ -238,7 +237,7 @@ function First(){
                 </div>
                 <ReviewBox>
                   <Title > 후기 </Title>
-                  <H1>{clickedBoxOne.content}</H1>
+                  <H1>{infoData?.content}</H1>
                 </ReviewBox>
                 </>)
                }

@@ -104,7 +104,7 @@ function Update() {
   const userID = useRecoilValue(isLoginAtom);
 
   const onValid = ({name, password,passwordConfirm}: IForm) => {
-    axios.post(`https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/MemberInfo-change/${userID}`,
+    axios.post(`https://port-0-baco-server-eg4e2alkhufq9d.sel4.cloudtype.app/Mypage/MemberInfo-change/${userID}`,
     {
       newPassword:password,
       newPasswordConfirm:passwordConfirm,
@@ -113,14 +113,14 @@ function Update() {
     {
       headers: {
         //'Content-Type': 'application/json',
-        //"Access-Control-Allow-Origin" : "*",
+        "Access-Control-Allow-Origin" : "*",
       }
     })
     .then((response) => {
       window.alert('회원 정보 수정이 완료되었습니다.')
       console.log(response);//수정된 회원정보 받아오기! => 정보는 알아서 백엔드 처리
       setnickname((nickname) => response?.data?.nickname);//반환된 새 닉네임 가져옴
-      history.push('/Mypage');
+      history.push('/');
     })
     .catch((error) => {
       console.log(error.response);
