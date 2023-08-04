@@ -57,7 +57,8 @@ const Overlay = styled(motion.div)`
   position:fixed;
   opacity:0;
   top:0;
-  width:1600px;
+  width:2000px;
+  margin-left: -300px;
   height:100%;
   background-color: rgba(0,0,0,0.5);
 `;
