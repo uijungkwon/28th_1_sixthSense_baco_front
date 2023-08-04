@@ -174,7 +174,7 @@ function First(){
         */
     
     const {  isLoading, data: reviewData } = useQuery<IReview[]>("allReview",fetchReviewBoard);
-      //console.log(reviewData);
+      console.log(reviewData);
     
     const [id, setId] = useState("0");
     const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
@@ -191,6 +191,7 @@ function First(){
 
     const onBoxClicked = (review_id: string)=>{
         history.push(`/Review/First/${review_id}`);
+        console.log(infoData);
       };
     const rarr = "===>"
     return (

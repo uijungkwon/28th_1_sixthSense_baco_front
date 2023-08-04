@@ -25,7 +25,7 @@ import { isEmailAtom, isLoginAtom, isNickNameAtom } from "../atoms";
     width: 100%;
     top: 0;
     height: 46px;
-    font-size: 15px;
+    font-size: 10px;
     padding: 20px 40px;
   `;
   
@@ -59,7 +59,7 @@ const LogoItems = styled.ul`
   const Items = styled.ul`
     display: flex;
     align-items: center;
-    margin-left:100px;
+    margin-left:20px;
     font-family: "Hanna"; 
     color: ${(props) => props.theme.white.darker};
     transition: color 0.3 ease-in-out;
@@ -68,7 +68,7 @@ const LogoItems = styled.ul`
     }
   `;
   const Item = styled.li`
-    margin-right: 100px;
+    margin-right: 120px;
     display: flex;
     position: relative;
     justify-content: center;
@@ -80,7 +80,7 @@ const LogoItems = styled.ul`
 
 // 3) 회원가입/로그인 화면
   const LogItems = styled.ul`
-  margin-left: 80px;
+  margin-left: 50px;
   display: flex;
   align-items: center;
   font-size:12px;

@@ -200,7 +200,7 @@ function Road() {
     )
     .then((response) => {
      setMapUrl(response.data.mapUrl);//응답으로 해당 장소 "mapURL" 받아오기!
-     console.log(response.data);
+     console.log(response.data.mapUrl);
     }).catch(function (error) {
       //오류 발생 시 실행될 문장
       console.log("서버에 후기 작성 정보를 보내는데 실패했습니다");
