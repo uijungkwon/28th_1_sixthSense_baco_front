@@ -55,7 +55,7 @@ const Title = styled.h1`
 const MapBox = styled(motion.div)`
   background: rgba(255, 255, 255, 0.5);
   width: 625px;
-  height: 450px;
+  height: 420px;
   margin-right:100px;
   margin-left:100px;
   margin-top:40px;
@@ -167,7 +167,7 @@ interface IForm { //recoil로 만들어서 변수 사용할 수 있도록 만들
 const IFrame = styled.iframe`
   width: 100%;
   height: 100%;
-  margin-left:15px;
+  margin-top:5px;
 `;
 
 function Road() {

@@ -137,7 +137,7 @@ interface InfoData{
 
 
 function Third(){function fetchReviewBoard() {
-  return fetch(`${BASE_URL}/Review/reviews?hashtag=3`)
+  return fetch(`${BASE_URL}/Review/reviews?hashtag=0`)
   .then((response) =>
     response.json() //"힐링 태그" 목록 전체 가져오기
   );
