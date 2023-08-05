@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.js": "/28th_1_sixthSense_baco_front/static/js/main.103154d5.js",
+    "main.js": "/28th_1_sixthSense_baco_front/static/js/main.20b49a75.js",
     "static/media/BMJUA_ttf.ttf": "/28th_1_sixthSense_baco_front/static/media/BMJUA_ttf.bf12d2d886260d73277b.ttf",
     "static/media/BMHANNAAir_ttf.ttf": "/28th_1_sixthSense_baco_front/static/media/BMHANNAAir_ttf.d0c38d74f11fd837be79.ttf",
     "static/media/roadBg.png": "/28th_1_sixthSense_baco_front/static/media/roadBg.cd04d5ec17ed1a2532c7.png",
     "static/media/homeBgPhoto.png": "/28th_1_sixthSense_baco_front/static/media/homeBgPhoto.f07ec871d45e23b5f48e.png",
     "static/media/bike.png": "/28th_1_sixthSense_baco_front/static/media/bike.bbb21bd2ea116a803fae.png",
     "index.html": "/28th_1_sixthSense_baco_front/index.html",
-    "main.103154d5.js.map": "/28th_1_sixthSense_baco_front/static/js/main.103154d5.js.map"
+    "main.20b49a75.js.map": "/28th_1_sixthSense_baco_front/static/js/main.20b49a75.js.map"
   },
   "entrypoints": [
-    "static/js/main.103154d5.js"
+    "static/js/main.20b49a75.js"
   ]
 }
